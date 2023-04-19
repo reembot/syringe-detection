@@ -42,21 +42,31 @@ int main(int argc, char** argv)
 {
    const char* default_file = "vout.mp4";
    const char* filename = argc >=2 ? argv[1] : default_file;
-   VideoCapture cap(0);
+
+//   VideoCapture cap(0);
+   VideoCapture cap(filename);
    namedWindow(filename);
    char winInput;
    Mat src;
    int cnt=0;
+   int waitVal = 100;
 
-   cap.set(CAP_PROP_FRAME_WIDTH, 1280);
-   cap.set(CAP_PROP_FRAME_HEIGHT, 720);
+
+//   cap.set(CAP_PROP_FRAME_WIDTH, 1280);
+//   cap.set(CAP_PROP_FRAME_HEIGHT, 720);
+//   cap.set(CAP_PROP_FPS,30);
    cap.read(src);
 
-   VideoWriter vout;
-    Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
-                  (int) cap.get(CAP_PROP_FRAME_HEIGHT));
+//waitKey(0);
+//   return 0;
 
-   vout.open(filename, VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
+//   VideoWriter vout;
+//    Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
+//                  (int) cap.get(CAP_PROP_FRAME_HEIGHT));
+
+//   vout.open(filename, VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
+//   vout.open(filename, VideoWriter::fourcc('H','2','6','4'), 10, S, true);
+//   vout.open(filename, VideoWriter::fourcc('R','G','B','A'), cap.get(CAP_PROP_FPS), S, true);
 
 
    while (1)
@@ -64,20 +74,28 @@ int main(int argc, char** argv)
       cnt++;
       cap.read(src);
       imshow(filename, src);
-      vout.write(src);
+//      vout.write(src);
+//      if(cnt==600)break;
 
 
-      if ((winInput = waitKey(1)) == ESCAPE_KEY)
+      if ((winInput = waitKey(waitVal)) == ESCAPE_KEY)
       {
           break;
       }
+      else if(winInput == ' ') 
+      {
+          waitVal = (waitVal)?0:100;
+      }
       else if(winInput == 's') 
       {
-          String imgname = to_string(cnt) + ".png";
+//          String imgname = to_string(cnt) + ".png";
+          String imgname = filename + to_string(cnt) + ".png";
           imwrite(imgname, src);
       }
       
    }
 
    destroyWindow(filename); 
+//   vout.release();
+   cap.release();
 };

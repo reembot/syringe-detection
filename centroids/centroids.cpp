@@ -1,10 +1,12 @@
+// Reema Shadid - CSCI612 Final Project
+// Code adapted from Kris Selvidge centroid detection for Lab
+
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
@@ -15,41 +17,43 @@ using namespace std;
 #define ESCAPE_KEY (27)
 #define SYSTEM_ERROR (-1)
 
-int main(int argc, char** argv)
-{
-//open camera or video file
-   const char* default_file = "0";
-   const char* filename = argc >=2 ? argv[1] : default_file;
-   VideoCapture cap;
-   if (*filename == '0') {
-     cap.open(0);
-   } else {
-     cap.open(filename);
-   }
-   bool origView = 1;
-   namedWindow(filename);
-   char winInput;
+int main(int argc, char** argv) {
 
-//mats for original capture, grayscale version, previous frame and frame difference
-   Mat src, srcGray, srcPrev, srcDiff;
+  //open camera or video file with CLI arg, if entered
+  const char* default_file = "0";
+  const char* filename = argc >=2 ? argv[1] : default_file;
+  VideoCapture cap;
 
-   cap.read(src);
-   if(src.empty())
-   {
-     return 0;
-   }
+  if (*filename == '0') {
+   cap.open(0);
+  } else {
+    cap.open(filename);
+  }
 
-   VideoWriter vout;
-    Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
-                  (int) cap.get(CAP_PROP_FRAME_HEIGHT));
+  bool origView = 1;
+  namedWindow(filename);
+  char winInput;
 
-   vout.open("centroid.mp4", VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
+  //mats for original capture, grayscale version, previous frame and frame difference
+  Mat src, srcGray, srcPrev, srcDiff;
+
+  // check source exists
+  cap.read(src);
+  if (src.empty()) {
+    return 0;
+  }
+
+  // VideoWriter vout;
+  // Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
+  //                 (int) cap.get(CAP_PROP_FRAME_HEIGHT));
+
+  //  vout.open("centroid.mp4", VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
 
 
-// default method will simply compare change in intensity on single channel image (grayscale)
-   cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
-   srcPrev = srcGray.clone();
-   srcDiff = srcGray.clone();
+  // default method will simply compare change in intensity on single channel image (grayscale)
+  cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
+  srcPrev = srcGray.clone();
+  srcDiff = srcGray.clone();
 
 // alternatively we could do a difference on each color channel with code below
 //   srcGray = src.clone();  
@@ -58,40 +62,37 @@ int main(int argc, char** argv)
 //   srcPrev = src.clone();
 //   srcDiff = src.clone();
 
+  printf("Press 's' to write screen capture, 'c' to switch views, or 'esc' to exit\n");
+  // track frame count and timestamp
+  int count = 0;
 
-   printf("Press 's' to write screen capture, 'c' to switch views or 'esc' to exit\n");
-   int cnt = 0;
-
-
-   while (1)
-   {
-      cnt++;
+  while (1) {
+    count++;
       
-      cap.read(src);
-      if(src.empty())
-      {
-        break;
-      }
+    cap.read(src);
+    if (src.empty()) {
+      break;
+    }
 
-      cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
+    cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
 
-// commented code for trying difference on BGR channels instead of grayscale
-//      split(src,spl);
-//      split(src,spldiff);
-//      split(srcPrev,splprev);
+    // commented code for trying difference on BGR channels instead of grayscale
+    //      split(src,spl);
+    //      split(src,spldiff);
+    //      split(srcPrev,splprev);
 
-      absdiff(srcPrev, srcGray, srcDiff);
+    absdiff(srcPrev, srcGray, srcDiff);
 
-//      absdiff(splprev[0], spl[0], spldiff[0]);
-//      absdiff(splprev[1], spl[1], spldiff[1]);
-//      absdiff(splprev[2], spl[2], spldiff[2]);
+    //      absdiff(splprev[0], spl[0], spldiff[0]);
+    //      absdiff(splprev[1], spl[1], spldiff[1]);
+    //      absdiff(splprev[2], spl[2], spldiff[2]);
 
-//      merge(spldiff, srcDiff);
+    //      merge(spldiff, srcDiff);
 
-//      cv::cvtColor(srcDiff, srcDiff, COLOR_BGR2GRAY);
+    //      cv::cvtColor(srcDiff, srcDiff, COLOR_BGR2GRAY);
       
-       srcPrev = srcGray.clone();
-//      srcPrev = src.clone();
+    srcPrev = srcGray.clone();
+    //      srcPrev = src.clone();
 
        int x_min = src.cols;
        int x_max = 0;
@@ -100,49 +101,50 @@ int main(int argc, char** argv)
        int y_hat = 0;
        int x_hat = 0;
 
-// troubleshooting 
-//       std::cout << x_max << " " << x_min << " " << y_min << " " << y_max << " hats " << x_hat << " " << y_hat << endl;
+    // troubleshooting 
+    //       std::cout << x_max << " " << x_min << " " << y_min << " " << y_max << " hats " << x_hat << " " << y_hat << endl;
 
 
-       for(int j=0;j<src.rows-2;j++) //due to intrinsic camera issue skipping last few rows as 718 and 719 always vary in intensity
-       {
-         for(int i=0;i<src.cols;i++)
-         {
-             if(srcDiff.at<Vec3b>(j,i)[0] > 175)
-             {
-                 if(x_min > i)x_min = i;
-                 if(x_max < i)x_max = i;
-                 if(y_min > j)y_min = j;
-                 if(y_max < j)y_max = j;
-             }
-         }
-       }
+    for ( int j= 0; j< src.rows; j++ ) {
+      for ( int i= 0; i< src.cols; i++ ) {
 
-// y hat and x hat from old crosshairs code,  useful if getting exact center
-//       x_hat = int((x_max - x_min)/2) + x_min;
-//       y_hat = int((y_max - y_min)/2) + y_min;
-//       std::cout << x_max << " " << x_min << " " << y_min << " " << y_max << " hats " << x_hat << " " << y_hat << endl;
+        if ( srcDiff.at<Vec3b>(j,i)[0] > 175 ) { // threshold for.... using GIMP
+                 if (x_min > i) x_min = i;
+                 if (x_max < i) x_max = i;
+                 if (y_min > j) y_min = j;
+                 if (y_max < j) y_max = j;
+        }
+      }
+    }
 
-       if(x_max > x_min)
-       {
-// for marking center of movement
-//         line(src,Point(x_hat-10,y_hat),Point(x_hat+10,y_hat),Scalar(0,0,255),5); // from left to right
-//         line(src,Point(x_hat,y_hat-10),Point(x_hat,y_hat+10),Scalar(0,0,255),5); // from top to bottom
+    // y hat and x hat from old crosshairs code,  useful if getting exact center
+    //       x_hat = int((x_max - x_min)/2) + x_min;
+    //       y_hat = int((y_max - y_min)/2) + y_min;
+    //       std::cout << x_max << " " << x_min << " " << y_min << " " << y_max << " hats " << x_hat << " " << y_hat << endl;
 
-           int h = y_max - y_min;
-           int w = x_max - x_min; 
+    // if threshold box met
+    if ( x_max > x_min ) {
+    // for marking center of movement
+    //         line(src,Point(x_hat-10,y_hat),Point(x_hat+10,y_hat),Scalar(0,0,255),5); // from left to right
+    //         line(src,Point(x_hat,y_hat-10),Point(x_hat,y_hat+10),Scalar(0,0,255),5); // from top to bottom
 
-           if(h > 50  && h < 300){                      
-             Mat dst = src(Rect(x_min+w/2,y_min,w/2,h));
-//commented code for using standard deviation to reduce number of roi's to search
-//             Scalar meanRGB,stddev;
-//             meanStdDev(dst,meanRGB,stddev);
-//             int totaldev;
-//             totaldev = int(stddev[0] + stddev[1] + stddev[2]);
-//             if(totaldev > 135) {
-             //search for reddish orange for Rocuronium
-             Mat searchRoc;
-             inRange(dst,Scalar(0,0,200),Scalar(120,120,255),searchRoc);
+      // calculate box (potential hand) size
+      int h = y_max - y_min;
+      int w = x_max - x_min;
+      cout << "box height: " << h << endl;
+      cout << "box width: "  << w << endl;
+
+      if ( h> 50  && h< 300 ) { // reaches full size of hand                
+        Mat dst = src(Rect(x_min + w/2, y_min, w/2, h));
+      //commented code for using standard deviation to reduce number of roi's to search
+      //             Scalar meanRGB,stddev;
+      //             meanStdDev(dst,meanRGB,stddev);
+      //             int totaldev;
+      //             totaldev = int(stddev[0] + stddev[1] + stddev[2]);
+      //             if(totaldev > 135) {
+      //search for reddish orange for Rocuronium
+      Mat searchRoc;
+      inRange(dst,Scalar(0,0,200),Scalar(120,120,255),searchRoc);
 //             std::cout << "Roc = " << to_string(sum(searchRoc)[0]) << endl;
              bool hasRoc = (sum(searchRoc)[0] > 5000);
              //search for light purple Phenylephrine
@@ -159,7 +161,7 @@ int main(int argc, char** argv)
 //             inRange(dst,Scalar(50,50,50),Scalar(100,100,100),searchLid);
 //             bool hasLid = (sum(searchLid)[0] > 20000);
 //             std::cout << "Lid = " << to_string(sum(searchLid)[0]) << endl;
-             if(hasRoc || hasPhen || hasProp) {
+             if ( hasRoc || hasPhen || hasProp ) {
                if(hasRoc &&  sum(searchPhen)[0] < sum(searchRoc)[0]) { putText(src, "Rocuronium", Point(x_min+w/2+30,y_min+30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1, LINE_AA);
                }  else if(hasPhen && sum(searchProp)[0] < sum(searchPhen)[0]) { putText(src, "Phenylephrine", Point(x_min+w/2+30,y_min+30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1, LINE_AA); 
                }  else if(hasProp) { putText(src, "Propofol", Point(x_min+w/2+30,y_min+30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1, LINE_AA); 
@@ -199,11 +201,18 @@ int main(int argc, char** argv)
           String imgname = to_string(cnt) + ".png";
           imwrite(imgname, src);
       }
-      else if(winInput == 'c') 
+      else if (winInput == 'c') 
       {
           origView = origView ? 0 : 1; //flip flag to show original or difference
       }
-
    }
    destroyWindow(filename); 
 }
+
+
+// set size of syringe
+// once increased to size of hand, wait and check for box to return to syringe size
+// if back to syringe size, detect for color within the box defined and output type
+
+// detect once there's no changes along any edge of the frame,
+// then run color detection and check it's a specific size from the inRange() frame
