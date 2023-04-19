@@ -61,11 +61,11 @@ int main(int argc, char** argv)
    cap.set(CAP_PROP_FRAME_WIDTH, 1280);
    cap.set(CAP_PROP_FRAME_HEIGHT, 720);
 
-   VideoWriter vout;
-    Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
-                  (int) cap.get(CAP_PROP_FRAME_HEIGHT));
+//   VideoWriter vout;
+//    Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
+//                  (int) cap.get(CAP_PROP_FRAME_HEIGHT));
 
-   vout.open(out_vfilename, VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
+//   vout.open(out_vfilename, VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
 
    if (infile.good()) {
      std::getline(infile,med,',');
@@ -118,7 +118,7 @@ int main(int argc, char** argv)
         break;
       }
       imshow(in_vfilename, src);
-      vout.write(src);
+//      vout.write(src);
       if ((winInput = waitKey(waitval)) == ESCAPE_KEY)
       {
         break;

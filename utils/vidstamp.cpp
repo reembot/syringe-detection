@@ -53,10 +53,10 @@ int main(int argc, char** argv)
    Mat src;
    int waitval = 100;
 
-   cap.set(CAP_PROP_FRAME_WIDTH, 1280);
-   cap.set(CAP_PROP_FRAME_HEIGHT, 720);
+//   cap.set(CAP_PROP_FRAME_WIDTH, 1280);
+//   cap.set(CAP_PROP_FRAME_HEIGHT, 720);
 
-   std::cout << "FPS: " << cap.get(CAP_PROP_FPS) << endl;
+//   std::cout << "FPS: " << cap.get(CAP_PROP_FPS) << endl;
 
    std::cout << "Starting video display.  Press p to pause. " << endl;
 

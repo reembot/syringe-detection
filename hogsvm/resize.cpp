@@ -22,7 +22,7 @@ int main( int argc, char** argv )
         {
             return 0;
         }
-        resize(img, rimg, Size(128,128), INTER_LINEAR);
+        resize(img, rimg, Size(600,200), INTER_LINEAR);
 //        imshow("resized", rimg);
 //        if( waitKey(0) == 27
 //        {
