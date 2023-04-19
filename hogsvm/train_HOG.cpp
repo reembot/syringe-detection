@@ -109,6 +109,7 @@ void computeHOGs( const Size wsize, const vector< Mat > & img_lst, vector< Mat >
                           wsize.height);
             cvtColor( img_lst[i](r), gray, COLOR_BGR2GRAY );
             hog.compute( gray, descriptors, Size( 8, 8 ), Size( 0, 0 ) );
+//            hog.compute( img_lst[i](r), descriptors, Size( 8, 8 ), Size( 0, 0 ) );
             gradient_lst.push_back( Mat( descriptors ).clone() );
             if ( use_flip )
             {
@@ -137,13 +138,14 @@ void test_trained_detector( String obj_det_filename, String test_dir, String vid
             cap.open( videofilename );
     }
     obj_det_filename = "testing " + obj_det_filename;
-    namedWindow( obj_det_filename, WINDOW_NORMAL );
+//    namedWindow( obj_det_filename, WINDOW_NORMAL );
+    namedWindow( obj_det_filename );
     for( size_t i=0;; i++ )
     {
         Mat img;
         if ( cap.isOpened() )
         {
-//            if(!delay) { cap.set(CAP_PROP_POS_MSEC,137000); } //used to skip to 2 minute 17 second mark of video where intersection includes stop sign
+            if(!delay) { cap.set(CAP_PROP_POS_MSEC,10000); } //used to skip to 2 minute 17 second mark of video where intersection includes stop sign
             cap >> img;
             delay = 1;
         }
@@ -157,7 +159,9 @@ void test_trained_detector( String obj_det_filename, String test_dir, String vid
         }
         vector< Rect > detections;
         vector< double > foundWeights;
+
         hog.detectMultiScale( img, detections, foundWeights );
+        std::cout << "Testing frame.  Found: " << detections.size() << endl;
         for ( size_t j = 0; j < detections.size(); j++ )
         {
             cnt++;
@@ -280,6 +284,7 @@ int main( int argc, char** argv )
     svm->setP( 0.1 ); // for EPSILON_SVR, epsilon in loss function?
     svm->setC( 0.01 ); // From paper, soft classifier
     svm->setType( SVM::EPS_SVR ); // C_SVC; // EPSILON_SVR; // may be also NU_SVR; // do regression task
+//    svm->setType( SVM::NU_SVR ); // C_SVC; // EPSILON_SVR; // may be also NU_SVR; // do regression task
     svm->train( train_data, ROW_SAMPLE, labels );
     clog << "...[done]" << endl;
     if ( train_twice )
