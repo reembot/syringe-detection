@@ -4,7 +4,10 @@
 using namespace cv;
 using namespace std;
 
-bool intersection(Vec4i a, Vec4i b, Point2f& intersection_point) {
+// finding the intersection point
+bool intersection(Vec4i a, Vec4i b, Point2f &intersection_point)
+{
+    // storing the variables of two points for line a and b
     float x1 = a[0];
     float y1 = a[1];
     float x2 = a[2];
@@ -14,15 +17,19 @@ bool intersection(Vec4i a, Vec4i b, Point2f& intersection_point) {
     float x4 = b[2];
     float y4 = b[3];
 
+    // finding the denominator, use the line function to calculate
     float denominator = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
-    if (denominator == 0) {
+    if (denominator == 0)
+    {
         return false;
     }
 
     float ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator;
     float ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator;
 
-    if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
+    // if the two lines are past the threshold, then calculate the intesection point, return true, otherwise, return false
+    if (ua < 0 || ua > 1 || ub < 0 || ub > 1)
+    {
         return false;
     }
 
@@ -31,22 +38,34 @@ bool intersection(Vec4i a, Vec4i b, Point2f& intersection_point) {
     return true;
 }
 
-int main() {
-    // Open the video capture device
-    VideoCapture cap(0);
-    if (!cap.isOpened()) {
-        cerr << "Failed to open video capture device" << endl;
-        return 1;
+int main(int argc, char **argv)
+{
+    const char *default_file = "0";
+    const char *filename = argc >= 2 ? argv[1] : default_file;
+    VideoCapture cap;
+    if (*filename == '0')
+    {
+        cap.open(0);
     }
+    else
+    {
+        cap.open(filename);
+    }
+    bool canView = 0;
+    namedWindow(filename);
+    char winInput;
+    int waitval = 100;
+    bool origView = 1, tview = 1;
 
-    // Create a window to display the output
-    namedWindow("Video", WINDOW_NORMAL);
+    printf("Press space to pause/unpause, 's' to step frame by frame, 'c' to switch views or 'esc' to exit\n");
 
-    while (true) {
+    while (true)
+    {
         // Read a frame from the video capture device
         Mat frame;
-        cap >> frame;
-        if (frame.empty()) {
+        cap.read(frame);
+        if (frame.empty())
+        {
             break;
         }
 
@@ -63,32 +82,38 @@ int main() {
         // Filter the lines to keep only those that are roughly parallel to each other
         vector<Vec4i> filtered_lines;
         double angle_threshold = 15; // degrees
-        for (size_t i = 0; i < lines.size(); i++) {
+        for (size_t i = 0; i < lines.size(); i++)
+        {
             Vec4i line = lines[i];
             double dx = line[2] - line[0];
             double dy = line[3] - line[1];
             double angle = abs(atan2(dy, dx) * 180 / CV_PI);
-            if (angle < angle_threshold || angle > 180 - angle_threshold) {
+            if (angle < angle_threshold || angle > 180 - angle_threshold)
+            {
                 filtered_lines.push_back(line);
             }
         }
 
         // Find the intersection points of the remaining lines
         vector<Point2f> corners;
-        for (size_t i = 0; i < filtered_lines.size(); i++) {
+        for (size_t i = 0; i < filtered_lines.size(); i++)
+        {
             Vec4i line1 = filtered_lines[i];
-            for (size_t j = i + 1; j < filtered_lines.size(); j++) {
+            for (size_t j = i + 1; j < filtered_lines.size(); j++)
+            {
                 Vec4i line2 = filtered_lines[j];
                 Point2f pt;
                 bool found = intersection(line1, line2, pt);
-                if (found) {
+                if (found)
+                {
                     corners.push_back(pt);
                 }
             }
         }
 
         // Draw the rectangle around the corners, if enough corners are found
-        if (corners.size() >= 4) {
+        if (corners.size() >= 4)
+        {
             // Find the bounding box around the corners
             Rect box = boundingRect(corners);
 
@@ -97,13 +122,16 @@ int main() {
 
             // Display the resulting image
             imshow("Video", frame);
-        } else {
+        }
+        else
+        {
             // Display the original image
             imshow("Video", edges);
         }
 
         // Wait for a key press and check if it's the ESC key
-        if (waitKey(1) == 27) {
+        if (waitKey(1) == 27)
+        {
             break;
         }
     }
