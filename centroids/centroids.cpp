@@ -4,9 +4,13 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
+//#include "bounding_box.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
@@ -17,202 +21,262 @@ using namespace std;
 #define ESCAPE_KEY (27)
 #define SYSTEM_ERROR (-1)
 
-int main(int argc, char** argv) {
+/////////////////////////////////////////////////////////////////////////////////////
+///////// BOUNDING BOX CLASS ////////////////////////////////////////////////////////
 
-  //open camera or video file with CLI arg, if entered
-  const char* default_file = "0";
-  const char* filename = argc >=2 ? argv[1] : default_file;
-  VideoCapture cap;
+class bounding_box {
+    public:
+        bounding_box() {}
+        bounding_box(int rows, int cols)
+            : rows(rows), cols(cols), x_min(cols), x_max(0), y_min(rows), y_max(0) {}
+        bounding_box(const bounding_box& copy)
+            : x_min(copy.x_min), x_max(copy.x_max), y_min(copy.y_min), y_max(copy.y_max) {}
 
-  if (*filename == '0') {
-   cap.open(0);
-  } else {
-    cap.open(filename);
-  }
+        int x_min, x_max, y_min, y_max;
+        int rows, cols;
+          // calculate centroid
+        
+        // int centroid() {
+        //     int x_hat = int((bbox.x_max - bbox.x_min)/2) + bbox.x_min;
+        //     int y_hat = int((bbox.y_max - bbox.y_min)/2) + bbox.y_min;
+        // }
+        void clear() { x_min = cols; x_max = 0; y_min = rows; y_max = 0; }
+        int height() { return x_max > x_min ? y_max - y_min : 0; }
+        int width()  { return x_max > x_min ? x_max - x_min : 0; }
+        float area() { return x_max > x_min ? height() * width() : 0; }
+};
 
-  bool origView = 1;
-  namedWindow(filename);
-  char winInput;
+class color_box : public bounding_box {
 
-  //mats for original capture, grayscale version, previous frame and frame difference
-  Mat src, srcGray, srcPrev, srcDiff;
+    public:
+        color_box( int rows, int cols, string name, bool had, Scalar color )
+            : bbox(rows, cols), name(name), had_color(had), color(color) {}
+        string name;
+        bool had_color;
+        Scalar color;
+        bounding_box bbox;
+};
 
-  // check source exists
-  cap.read(src);
-  if (src.empty()) {
-    return 0;
-  }
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
-  // VideoWriter vout;
-  // Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
-  //                 (int) cap.get(CAP_PROP_FRAME_HEIGHT));
+bool colorScan( Mat& frame, bounding_box& ROI, bounding_box* label_box, string& label ) { // can specify region of interest
+    
+    Mat range;
+    bool found = false;
 
-  //  vout.open("centroid.mp4", VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
-
-
-  // default method will simply compare change in intensity on single channel image (grayscale)
-  cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
-  srcPrev = srcGray.clone();
-  srcDiff = srcGray.clone();
-
-// alternatively we could do a difference on each color channel with code below
-//   srcGray = src.clone();  
-//   vector<Mat> spl, splprev, spldiff;
-//   split(src, spl);
-//   srcPrev = src.clone();
-//   srcDiff = src.clone();
-
-  printf("Press 's' to write screen capture, 'c' to switch views, or 'esc' to exit\n");
-  // track frame count and timestamp
-  int count = 0;
-
-  while (1) {
-    count++;
-      
-    cap.read(src);
-    if (src.empty()) {
-      break;
-    }
-
-    cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
-
-    // commented code for trying difference on BGR channels instead of grayscale
-    //      split(src,spl);
-    //      split(src,spldiff);
-    //      split(srcPrev,splprev);
-
-    absdiff(srcPrev, srcGray, srcDiff);
-
-    //      absdiff(splprev[0], spl[0], spldiff[0]);
-    //      absdiff(splprev[1], spl[1], spldiff[1]);
-    //      absdiff(splprev[2], spl[2], spldiff[2]);
-
-    //      merge(spldiff, srcDiff);
-
-    //      cv::cvtColor(srcDiff, srcDiff, COLOR_BGR2GRAY);
-      
-    srcPrev = srcGray.clone();
-    //      srcPrev = src.clone();
-
-       int x_min = src.cols;
-       int x_max = 0;
-       int y_min = src.rows;
-       int y_max = 0;
-       int y_hat = 0;
-       int x_hat = 0;
-
-    // troubleshooting 
-    //       std::cout << x_max << " " << x_min << " " << y_min << " " << y_max << " hats " << x_hat << " " << y_hat << endl;
-
-
-    for ( int j= 0; j< src.rows; j++ ) {
-      for ( int i= 0; i< src.cols; i++ ) {
-
-        if ( srcDiff.at<Vec3b>(j,i)[0] > 175 ) { // threshold for.... using GIMP
-                 if (x_min > i) x_min = i;
-                 if (x_max < i) x_max = i;
-                 if (y_min > j) y_min = j;
-                 if (y_max < j) y_max = j;
+        if ( label == "Rocuronium" ) {
+            inRange(frame, Scalar(0,64,192), Scalar(64,128,255), range);
+            //inRange(frame, Scalar(0,165,255), Scalar(0,255,255), range);
+            if (countNonZero(range) > 5000) {
+                found = true;
+            }
         }
-      }
+        else if ( label == "Propofol" ) {
+            inRange(frame, Scalar(0,128,128),Scalar(64,192,255), range);
+            if (countNonZero(range) > 5000) {
+            found = true;
+            }
+        }
+        else if ( label == "Phenylephrine" ) {
+            inRange(frame, Scalar(128,90,180), Scalar(240,162,208), range);
+            if (countNonZero(range) > 5000) {
+            found = true;
+            }
+        } else {
+			cout << "Label unsupported for color detection." << endl;
+		}
+
+    // scan region of interest for label boundaries
+    if ( found ) {
+
+        for ( int j= 0; j< ROI.height(); j++ ) {
+            for ( int i= 0; i< ROI.width(); i++ ) {
+
+                if ( range.at<Vec3b>(j,i)[0] > 0 ) {
+                    if (label_box->x_min > i) label_box->x_min = i;
+                    if (label_box->x_max < i) label_box->x_max = i;
+                    if (label_box->y_min > j) label_box->y_min = j;
+                    if (label_box->y_max < j) label_box->y_max = j;
+                }
+            }  
+        }
     }
-
-    // y hat and x hat from old crosshairs code,  useful if getting exact center
-    //       x_hat = int((x_max - x_min)/2) + x_min;
-    //       y_hat = int((y_max - y_min)/2) + y_min;
-    //       std::cout << x_max << " " << x_min << " " << y_min << " " << y_max << " hats " << x_hat << " " << y_hat << endl;
-
-    // if threshold box met
-    if ( x_max > x_min ) {
-    // for marking center of movement
-    //         line(src,Point(x_hat-10,y_hat),Point(x_hat+10,y_hat),Scalar(0,0,255),5); // from left to right
-    //         line(src,Point(x_hat,y_hat-10),Point(x_hat,y_hat+10),Scalar(0,0,255),5); // from top to bottom
-
-      // calculate box (potential hand) size
-      int h = y_max - y_min;
-      int w = x_max - x_min;
-      cout << "box height: " << h << endl;
-      cout << "box width: "  << w << endl;
-
-      if ( h> 50  && h< 300 ) { // reaches full size of hand                
-        Mat dst = src(Rect(x_min + w/2, y_min, w/2, h));
-      //commented code for using standard deviation to reduce number of roi's to search
-      //             Scalar meanRGB,stddev;
-      //             meanStdDev(dst,meanRGB,stddev);
-      //             int totaldev;
-      //             totaldev = int(stddev[0] + stddev[1] + stddev[2]);
-      //             if(totaldev > 135) {
-      //search for reddish orange for Rocuronium
-      Mat searchRoc;
-      inRange(dst,Scalar(0,0,200),Scalar(120,120,255),searchRoc);
-//             std::cout << "Roc = " << to_string(sum(searchRoc)[0]) << endl;
-             bool hasRoc = (sum(searchRoc)[0] > 5000);
-             //search for light purple Phenylephrine
-             Mat searchPhen;
-             inRange(dst,Scalar(200,0,200),Scalar(255,200,255),searchPhen);
-//             std::cout << "Phen = " << to_string(sum(searchPhen)[0]) << endl;
-             bool hasPhen = (sum(searchPhen)[0] > 40000);
-             //search for yellow for Propofol
-             Mat searchProp;
-             inRange(dst,Scalar(0,225,225),Scalar(200,255,255),searchProp);
-             bool hasProp = (sum(searchProp)[0] > 500000);
-             //search gray for Lidocaine, too difficult to differentiate currently
-//             Mat searchLid;
-//             inRange(dst,Scalar(50,50,50),Scalar(100,100,100),searchLid);
-//             bool hasLid = (sum(searchLid)[0] > 20000);
-//             std::cout << "Lid = " << to_string(sum(searchLid)[0]) << endl;
-             if ( hasRoc || hasPhen || hasProp ) {
-               if(hasRoc &&  sum(searchPhen)[0] < sum(searchRoc)[0]) { putText(src, "Rocuronium", Point(x_min+w/2+30,y_min+30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1, LINE_AA);
-               }  else if(hasPhen && sum(searchProp)[0] < sum(searchPhen)[0]) { putText(src, "Phenylephrine", Point(x_min+w/2+30,y_min+30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1, LINE_AA); 
-               }  else if(hasProp) { putText(src, "Propofol", Point(x_min+w/2+30,y_min+30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1, LINE_AA); 
-//               }  else if(hasLid) { putText(src, "Lidocaine", Point(x_min+w/2+30,y_min+30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1, LINE_AA); 
-               }
-             std::cout << to_string(cnt) << ".png" << endl;
-             std::cout << "Rocuronium = " << to_string(sum(searchRoc)[0]) << endl;
-             std::cout << "Phenylephrine = " << to_string(sum(searchPhen)[0]) << endl;
-             std::cout << "Propofol = " << to_string(sum(searchProp)[0]) << endl;
-//             std::cout << "Lid = " << to_string(sum(searchLid)[0]) << endl;
-             std::cout << endl;
-               rectangle(src,Point(x_min+w/2,y_min),Point(x_max,y_max),Scalar(0,0,255),5,2);
-//               String imgname =  to_string(cnt) + "B" + to_string(int(meanRGB[0])) + "G" + to_string(int(meanRGB[1])) + "R" + to_string(int(meanRGB[2])) + "D" + to_string(totaldev) + ".png";
-//               String imgname =  to_string(cnt) + "B" + to_string(int(meanRGB[0])) + "G" + to_string(int(meanRGB[1])) + "R" + to_string(int(meanRGB[2])) 
-//                   + "BD" + to_string(int(stddev[0])) + "GD" + to_string(int(stddev[1])) +  + "RD" + to_string(int(stddev[2])) + ".png";
-               String imgname = to_string(cnt) + ".png";
-               imwrite(imgname, dst);
-             }
-           }
-       }
-
-      if (origView)
-      {
-        imshow(filename,src);
-      } else {
-        imshow(filename,srcDiff);
-      }
-
-      vout.write(src);
-
-      if ((winInput = waitKey(1)) == ESCAPE_KEY)
-      {
-          break;
-      }
-      else if(winInput == 's') 
-      {
-          String imgname = to_string(cnt) + ".png";
-          imwrite(imgname, src);
-      }
-      else if (winInput == 'c') 
-      {
-          origView = origView ? 0 : 1; //flip flag to show original or difference
-      }
-   }
-   destroyWindow(filename); 
+    return found;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+int main(int argc, char** argv) {
 
-// set size of syringe
-// once increased to size of hand, wait and check for box to return to syringe size
-// if back to syringe size, detect for color within the box defined and output type
+    // open camera or video file with CLI arg, if entered
+    const char* default_file = "0";
+    const char* filename = argc >= 2 ? argv[1] : default_file;
+    VideoCapture cap;
+    char winInput;
 
-// detect once there's no changes along any edge of the frame,
-// then run color detection and check it's a specific size from the inRange() frame
+    // mats for original capture, grayscale version, previous frame and frame difference
+    Mat src, srcGray, srcPrev, srcDiff;
+
+    if  ( *filename == '0' ) {
+        cap.open(0);
+    } else {
+        cap.open(filename);
+    }
+    namedWindow(filename);
+
+    // check source exists
+    cap.read(src);
+    if ( src.empty() ) {
+        return 0;
+    }
+
+    // compare change in intensity on single channel image (grayscale)
+    cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
+    srcPrev = srcGray.clone();
+    srcDiff = srcGray.clone();
+
+    // track frame count and timestamp
+    int count = 0;
+    int maxChange = 0;
+    int minChange = 0;
+    bounding_box prev_bbox(src.rows, src.cols);
+    //bounding_box bbox(src.rows, src.cols);
+
+    unordered_map<string,bounding_box*> label_boxes;
+    unordered_map<string,bool> had_label;
+    //vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine"};
+    vector<string> labels = {"Rocuronium", "Propofol"};
+
+    for ( string label : labels ) {
+        label_boxes.insert( pair<string,bounding_box*>(label,new bounding_box(src.rows, src.cols)) );
+        had_label.insert( pair<string,bool>(label,false) );
+    }
+        // set bounding box coords
+    
+    //unordered_map<string,color_box> color_boxes;
+    // color_box(src.rows, src.cols, label, false, Scalar())
+    // color_boxes.insert(pair<string,color_box>(label,))
+    //printf("Press 's' to write screen capture, 'c' to switch views, or 'esc' to exit\n");
+
+    while (1) {
+        count++;
+      
+        cap.read(src);
+        if ( src.empty() )
+            break;
+
+        cv::cvtColor(src, srcGray, COLOR_BGR2GRAY);
+        // difference between last frame and current
+        absdiff(srcPrev, srcGray, srcDiff);
+        // prep new "previous" frame with current one
+        srcPrev = srcGray.clone();
+
+        // // set bounding box size
+        bounding_box bbox(src.rows, src.cols);
+
+        // search entire frame for threshold met
+        for ( int j= 0; j< src.rows; j++ ) {
+            for ( int i= 0; i< src.cols; i++ ) {
+
+                if ( srcDiff.at<Vec3b>(j,i)[0] > 50 ) { // threshold found using GIMP with a black background
+                    if (bbox.x_min > i) bbox.x_min = i;
+                    if (bbox.x_max < i) bbox.x_max = i;
+                    if (bbox.y_min > j) bbox.y_min = j;
+                    if (bbox.y_max < j) bbox.y_max = j;
+                }
+            }
+        }
+        // calculate centroid
+        int x_hat = int((bbox.x_max - bbox.x_min)/2) + bbox.x_min;
+        int y_hat = int((bbox.y_max - bbox.y_min)/2) + bbox.y_min;
+
+
+        // if threshold met (movement detected)
+        if ( bbox.x_max > 0 ) {
+            
+            // mark center of movement with a crosshair
+            line( src, Point(x_hat-10,y_hat), Point(x_hat+10,y_hat), Scalar(0,0,255),5 ); // from left to right
+            line( src, Point(x_hat,y_hat-10), Point(x_hat,y_hat+10), Scalar(0,0,255),5 ); // from top to bottom
+
+            // draw rectangle around box
+            rectangle( src, Point(bbox.x_min, bbox.y_min), Point(bbox.x_max, bbox.y_max), Scalar(0,255,0),5,0 );
+		}
+		
+		// calculate change in area between current and last movement box
+        int areaChange = int( ((bbox.area() - prev_bbox.area()) / prev_bbox.area()) *100);
+		
+		// if shrank by more than 50% (hand drops a syringe)
+        if ( areaChange < 0 && areaChange < -50 ) { 
+			
+			//cout << "Area shrank by: " << abs(areaChange) << "%." << endl;
+
+            //search for each color
+            for ( string label : labels ) {
+				
+				label_boxes[label]->clear();
+				
+				// determine shrank to use current box 
+                bool found = colorScan(src, prev_bbox, label_boxes[label], label);
+
+                if ( had_label[label] && found ) { // if label is still there (both true)
+					//cout << label << " persisted." << endl;
+					//continue;
+						
+                } else {
+                     if ( found ) {     // did not have before (single true)
+                        had_label[label] = true;
+                        cout << label << " entered." << endl;
+
+                    } else if ( had_label[label] ) { // had before, but no longer
+                        had_label[label] = false;
+                        //label_boxes[label]->clear();
+                        cout << label << " left." << endl;
+                            
+                    } else { // both false, was not there previously nor entered
+						continue;
+					}
+                }
+                //label_boxes[label]->clear();
+            }
+        }
+        
+        int position = 50;
+        for ( string label : labels ) {
+            if ( had_label.at(label) ) {
+				
+				Scalar box_color;
+				
+				if ( label == "Rocuronium" ) {
+					box_color = Scalar(0,165,255);
+				}
+				else if ( label == "Propofol" ) {
+					box_color = Scalar(64,192,255);
+				}
+				else { 
+					box_color = Scalar(240,162,208);
+				}
+                    
+                putText(src, label, Point(30,position), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA);
+                bounding_box* color_box = label_boxes[label];
+                rectangle( src, Point(color_box->x_min, color_box->y_min), Point(color_box->x_max, color_box->y_max), box_color, 5, 0 );
+                position += 50;
+            }
+            
+        }
+        
+        imshow(filename, src);
+        if ( areaChange > maxChange )
+			maxChange = areaChange;
+		if ( areaChange < minChange )
+			minChange = areaChange;
+
+        // save bbox history
+        prev_bbox = bbox;
+        //bbox.clear();
+        waitKey(10);
+    }
+    //cout << "Maximum Area Change: " << maxChange << endl;
+    //cout << "Minimum Area Change: " << minChange << endl;
+    for ( string label : labels )
+		delete label_boxes[label];
+}
