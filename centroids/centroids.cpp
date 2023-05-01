@@ -34,40 +34,23 @@ class bounding_box {
 
         int x_min, x_max, y_min, y_max;
         int rows, cols;
-          // calculate centroid
-        
-        // int centroid() {
-        //     int x_hat = int((bbox.x_max - bbox.x_min)/2) + bbox.x_min;
-        //     int y_hat = int((bbox.y_max - bbox.y_min)/2) + bbox.y_min;
-        // }
+
         void clear() { x_min = cols; x_max = 0; y_min = rows; y_max = 0; }
         int height() { return x_max > x_min ? y_max - y_min : 0; }
         int width()  { return x_max > x_min ? x_max - x_min : 0; }
         float area() { return x_max > x_min ? height() * width() : 0; }
 };
 
-class color_box : public bounding_box {
-
-    public:
-        color_box( int rows, int cols, string name, bool had, Scalar color )
-            : bbox(rows, cols), name(name), had_color(had), color(color) {}
-        string name;
-        bool had_color;
-        Scalar color;
-        bounding_box bbox;
-};
-
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-bool colorScan( Mat& frame, bounding_box& ROI, bounding_box* label_box, string& label ) { // can specify region of interest
+bool colorScan( Mat& frame, bounding_box& ROI, bounding_box* label_box, string& label ) {
     
     Mat range;
     bool found = false;
 
         if ( label == "Rocuronium" ) {
             inRange(frame, Scalar(0,64,192), Scalar(64,128,255), range);
-            //inRange(frame, Scalar(0,165,255), Scalar(0,255,255), range);
             if (countNonZero(range) > 5000) {
                 found = true;
             }
@@ -79,10 +62,29 @@ bool colorScan( Mat& frame, bounding_box& ROI, bounding_box* label_box, string& 
             }
         }
         else if ( label == "Phenylephrine" ) {
-            inRange(frame, Scalar(128,90,180), Scalar(240,162,208), range);
+            //inRange(frame, Scalar(128,90,180), Scalar(240,162,208), range);
+            inRange(frame, Scalar(130,120,170), Scalar(180,140,200), range);
             if (countNonZero(range) > 5000) {
             found = true;
             }
+        }
+        else if ( label == "Odanestron" ) {
+            inRange(frame, Scalar(180,180,180), Scalar(255,255,255), range);
+            if (countNonZero(range) > 5000) {
+            found = true;
+            }
+        }
+        else if ( label == "Lidocaine" ) {
+            inRange(frame, Scalar(200,200,200), Scalar(120,120,120), range);
+            if (countNonZero(range) > 5000) {
+            found = true;
+            }
+        // }
+        // else if ( label == "Dexamethasone" ) {
+        //     // inRange(frame, Scalar(60,60,60), Scalar(70,70,70), range);
+        //     if (countNonZero(range) > 5000) {
+        //     found = true;
+        //     }
         } else {
 			cout << "Label unsupported for color detection." << endl;
 		}
@@ -118,8 +120,10 @@ int main(int argc, char** argv) {
     Mat src, srcGray, srcPrev, srcDiff;
 
     if  ( *filename == '0' ) {
+		cout << "Opening camera." << endl;
         cap.open(0);
     } else {
+		cout << "Opening " << filename << "." << endl;
         cap.open(filename);
     }
     namedWindow(filename);
@@ -127,6 +131,7 @@ int main(int argc, char** argv) {
     // check source exists
     cap.read(src);
     if ( src.empty() ) {
+		cout << "Problem reading from source file." << endl;
         return 0;
     }
 
@@ -144,19 +149,23 @@ int main(int argc, char** argv) {
 
     unordered_map<string,bounding_box*> label_boxes;
     unordered_map<string,bool> had_label;
-    //vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine"};
-    vector<string> labels = {"Rocuronium", "Propofol"};
+    //vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine", "Odanestron", "Lidocaine", "Dexamethasone"};
+    vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine", "Odanestron", "Lidocaine"};
+
+    // unordered_map<string,pair<Scalar,Scalar>> label_colors = {
+    //     pair<"Rocuronium", pair<Scalar(0,64,192), Scalar(64,128,255)>>,
+    //     pair<"Propofol", pair<Scalar(0,128,128), Scalar(64,192,255)>>,
+    //     pair<"Phenylephrine", pair<Scalar(128,90,180), Scalar(240,162,208)>>,
+    //     pair<"Odanestron", pair<Scalar(180,180,180), Scalar(255,255,255)>>,
+    //     pair<"Lidocaine", pair<Scalar(60,60,60), Scalar(70,70,70)>>
+    //     //pair<"Dexamethasone", pair<false,>>
+    // }
 
     for ( string label : labels ) {
-        label_boxes.insert( pair<string,bounding_box*>(label,new bounding_box(src.rows, src.cols)) );
+        label_boxes.insert( pair<string,bounding_box*>(label, new bounding_box(src.rows, src.cols)) );
         had_label.insert( pair<string,bool>(label,false) );
     }
-        // set bounding box coords
-    
-    //unordered_map<string,color_box> color_boxes;
-    // color_box(src.rows, src.cols, label, false, Scalar())
-    // color_boxes.insert(pair<string,color_box>(label,))
-    //printf("Press 's' to write screen capture, 'c' to switch views, or 'esc' to exit\n");
+
 
     while (1) {
         count++;
@@ -178,7 +187,7 @@ int main(int argc, char** argv) {
         for ( int j= 0; j< src.rows; j++ ) {
             for ( int i= 0; i< src.cols; i++ ) {
 
-                if ( srcDiff.at<Vec3b>(j,i)[0] > 50 ) { // threshold found using GIMP with a black background
+                if ( srcDiff.at<Vec3b>(j,i)[0] > 90 ) { // threshold found using GIMP with a black background
                     if (bbox.x_min > i) bbox.x_min = i;
                     if (bbox.x_max < i) bbox.x_max = i;
                     if (bbox.y_min > j) bbox.y_min = j;
@@ -192,7 +201,7 @@ int main(int argc, char** argv) {
 
 
         // if threshold met (movement detected)
-        if ( bbox.x_max > 0 ) {
+        if ( bbox.x_max > 0 && bbox.y_max > 0 ) {
             
             // mark center of movement with a crosshair
             line( src, Point(x_hat-10,y_hat), Point(x_hat+10,y_hat), Scalar(0,0,255),5 ); // from left to right
@@ -213,9 +222,10 @@ int main(int argc, char** argv) {
             //search for each color
             for ( string label : labels ) {
 				
-				label_boxes[label]->clear();
+				// reset bounding box
+                label_boxes[label]->clear();
 				
-				// determine shrank to use current box 
+				// check for label color existence 
                 bool found = colorScan(src, prev_bbox, label_boxes[label], label);
 
                 if ( had_label[label] && found ) { // if label is still there (both true)
@@ -229,50 +239,46 @@ int main(int argc, char** argv) {
 
                     } else if ( had_label[label] ) { // had before, but no longer
                         had_label[label] = false;
-                        //label_boxes[label]->clear();
                         cout << label << " left." << endl;
                             
                     } else { // both false, was not there previously nor entered
 						continue;
 					}
                 }
-                //label_boxes[label]->clear();
             }
         }
         
         int position = 50;
         for ( string label : labels ) {
-            if ( had_label.at(label) ) {
-				
-				Scalar box_color;
-				
-				if ( label == "Rocuronium" ) {
-					box_color = Scalar(0,165,255);
-				}
-				else if ( label == "Propofol" ) {
-					box_color = Scalar(64,192,255);
-				}
-				else { 
-					box_color = Scalar(240,162,208);
-				}
-                    
-                putText(src, label, Point(30,position), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA);
+            if ( had_label[label] ) {
+
+                Scalar color;
+                if ( label == "Rocuronium" )
+                    color = Scalar(64,128,255);
+                else if ( label == "Propofol" )
+                    color = Scalar(64,192,255);
+                else if ( label == "Phenylephrine" )
+                    color = Scalar(240,162,208);
+                else if ( label == "Odanestron" )
+                    color = Scalar(255,255,255);
+                else if ( label == "Lidocaine" )
+                    color = Scalar(70,70,70);
+
+                putText(src, label, Point(30,position), FONT_HERSHEY_COMPLEX_SMALL, 0.8, color, 1, LINE_AA);
                 bounding_box* color_box = label_boxes[label];
-                rectangle( src, Point(color_box->x_min, color_box->y_min), Point(color_box->x_max, color_box->y_max), box_color, 5, 0 );
+                rectangle( src, Point(color_box->x_min, color_box->y_min), Point(color_box->x_max, color_box->y_max), color, 5, 0 );
                 position += 50;
             }
-            
         }
         
         imshow(filename, src);
-        if ( areaChange > maxChange )
-			maxChange = areaChange;
-		if ( areaChange < minChange )
-			minChange = areaChange;
+        //if ( areaChange > maxChange )
+		//	maxChange = areaChange;
+		//if ( areaChange < minChange )
+		//	minChange = areaChange;
 
         // save bbox history
         prev_bbox = bbox;
-        //bbox.clear();
         waitKey(10);
     }
     //cout << "Maximum Area Change: " << maxChange << endl;
