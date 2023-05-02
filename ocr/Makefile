@@ -7,18 +7,18 @@ CFLAGS= -O0 -g $(INCLUDE_DIRS) $(CDEFS)
 LIBS= -L/usr/lib -lopencv_core -lopencv_flann -lopencv_video -lrt
 
 HFILES= 
-CFILES= cannysobelcam.cpp
+CFILES= ocr.cpp
 
 SRCS= ${HFILES} ${CFILES}
 OBJS= ${CFILES:.cpp=.o}
 
-all:	cannysobelcam
+all:	ocr
 
 clean:
 	-rm -f *.o *.d
-	-rm -f cannysobelcam
+	-rm -f ocr
 
-cannysobelcam: cannysobelcam.o
+ocr: ocr.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $@.o `pkg-config --libs opencv4` $(LIBS)
 
 depend:
