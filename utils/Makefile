@@ -6,7 +6,7 @@ CDEFS=
 CFLAGS= -O3 -g $(INCLUDE_DIRS) $(CDEFS)
 LIBS= -L/usr/lib -lopencv_core -lopencv_flann -lopencv_video -lrt
 
-HFILES= 
+HFILES=
 CFILES= createVideo.cpp vidstamp.cpp showstamp.cpp scorestamps.cpp colorhist.cpp
 
 SRCS= ${HFILES} ${CFILES}
