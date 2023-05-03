@@ -2,20 +2,22 @@ import cv2
 import mediapipe as mp
 import time
 import numpy as np
+import math
 
 
 class HandDetector:
-    def __init__(self, model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5):
+    def __init__(self, model_complexity=0, min_detection_confidence=0.3, min_tracking_confidence=0.3):
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
         self.mp_hands = mp.solutions.hands
         self.wrist_landmarks = None
+        self.hand_landmarks = None
         self.hands = self.mp_hands.Hands(
             model_complexity=model_complexity,
             min_detection_confidence=min_detection_confidence,
             min_tracking_confidence=min_tracking_confidence,
         )
-
+        self.smallest_pinch = 1
     def detect(self, image):
         # To improve performance, optionally mark the image as not writeable to
         # pass by reference.
@@ -61,7 +63,8 @@ class HandDetector:
                 )
                 cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
 
-            # self.wrist_landmarks = handLandmarks[self.mp_hands.HandLandmark.WRIST]
+                self.wrist_landmarks = handLandmarks[self.mp_hands.HandLandmark.WRIST]
+                self.hand_landmarks = handLandmarks
             
             # skin_color = self.sample_skin_color(image, self.wrist_landmarks)
             
@@ -69,6 +72,13 @@ class HandDetector:
             
             # cv2.imshow("skinless", skinless)
             # print(skin_color)
+                # distance = self.get_distance_between_fingers(handLandmarks)
+                # self.hand_landmarks = handLandmarks
+                # if distance < self.smallest_pinch:
+                #     self.smallest_pinch = distance
+                # if distance < 0.065:
+                #     print("pinch" + str(distance))
+            
         
             return image, np.array([x_min, y_min, x_max, y_max])
         
@@ -118,3 +128,105 @@ class HandDetector:
         frame = cv2.bitwise_and(frame, frame, mask=mask)
 
         return frame
+    def get_distance_between_fingers(self):
+        # Get the landmarks for the index finger tip and the thumb tip
+        index_finger_tip = self.hand_landmarks[8]
+        thumb_tip = self.hand_landmarks[4]
+
+        # Calculate the Euclidean distance between the two landmarks
+        distance = math.sqrt((index_finger_tip[0] - thumb_tip[0]) ** 2 + (index_finger_tip[1] - thumb_tip[1]) ** 2)
+        
+        return distance
+    def isPinching(self, threshold):
+        if self.get_distance_between_fingers() < threshold:
+            return True
+        return False
+    #takes in the coordinates of the hand over time and returns the direction of the hand movement
+    def get_hand_movement(self, hand_coordinates_over_time):
+        if len(hand_coordinates_over_time) < 2:
+            return "none"  # not enough data to calculate movement
+        total_movement = 0
+        for i in range(len(hand_coordinates_over_time)-1):
+            start_x, _ = hand_coordinates_over_time[i]
+            end_x, _ = hand_coordinates_over_time[i+1]
+            total_movement += (end_x - start_x)
+        avg_movement = total_movement / (len(hand_coordinates_over_time)-1)
+        if avg_movement > 0:
+            return "right"
+        elif avg_movement < 0:
+            return "left"
+        else:
+            return "none"  # no movement in the x-direction
+        
+    #takes in the coordinates of the hand over time and returns the most extreme direction of the hand movement
+    def get_hand_movementALL(self, hand_coordinates_over_time):
+        if len(hand_coordinates_over_time) < 2:
+            return "none"  # not enough data to calculate movement
+        total_movementX = 0
+        total_movementY = 0
+        for i in range(len(hand_coordinates_over_time)-1):
+            start_x, start_y = hand_coordinates_over_time[i]
+            end_x, end_y = hand_coordinates_over_time[i+1]
+            
+            total_movementX += (end_x - start_x)
+            total_movementY += (end_y - start_y)
+            
+        avg_movementX = total_movementX / (len(hand_coordinates_over_time)-1)
+        avg_movementY = total_movementY / (len(hand_coordinates_over_time)-1)
+        if abs(total_movementX) > abs(total_movementY):
+            if avg_movementX > 0:
+                return "right"
+            return "left"
+        elif abs(total_movementX) < abs(total_movementY):
+            if avg_movementY > 0:
+                return "bottom"
+            return "top"
+        return "none"  # no movement in the x-direction or y-direction
+
+    #takes in the initial coordinate of the hand and the frame size
+    #returns weather the hand is in the right or left side of the frame
+    #ONLY WORKS FOR LEFT AND RIGHT EDGES OF THE FRAME
+    def get_hand_side(self, hand_coordinate, frame_size):
+        # print("hand coordinate: ", hand_coordinate * frame_size)
+        # print("frame size: ", frame_size)
+        if hand_coordinate[0] * frame_size[0] > frame_size[0] / 2:
+            return "right"
+        return "left"
+    
+    def get_hand_sideALL(self, hand_coordinate, frame_size):
+        x, y = hand_coordinate[0] * frame_size[0], hand_coordinate[1] * frame_size[1]
+        frame_width, frame_height = frame_size[0], frame_size[1]
+        if x < frame_width/2 and y < frame_height/2:
+            return "top", "left"
+        elif x >= frame_width/2 and y < frame_height/2:
+            return "top", "right"
+        elif x < frame_width/2 and y >= frame_height/2:
+            return "bottom", "left"
+        else:
+            return "bottom", "right"
+    
+    #takes in the predicted hand movement and the starting side of the hand
+    #if we are moving in the opposite direction of the starting side, we have let go
+    def drop_or_pickup(self, predicted_hand_movement, init_hand_side):
+        count = 0
+        for i in range(len(predicted_hand_movement)):
+            if predicted_hand_movement[i] != init_hand_side:
+                count += 1
+        if count > len(predicted_hand_movement) / 2:
+            return "drop"
+        return "pickup"
+    
+     #takes in the predicted hand movement and the starting side of the hand
+    #if we are moving in the opposite direction of the starting side, we have let go
+    def drop_or_pickupALL(self, predicted_hand_movement, init_hand_side):
+        count = 0
+        for i in range(len(predicted_hand_movement)):
+            if predicted_hand_movement[i] == init_hand_side[0] or predicted_hand_movement[i] == init_hand_side[1]:
+                count += 1
+                # print("prediction ", i, ": ", predicted_hand_movement[i])
+        # print("count: ", count, "len: ", len(predicted_hand_movement))
+        if count >= (len(predicted_hand_movement) / 2):
+            return "pickup"
+        return "drop"
+  
+  
