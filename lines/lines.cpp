@@ -1,8 +1,12 @@
+#include <opencv2/opencv.hpp>
+//#include <vector>
+
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
 #include <iostream>
 
 #include <opencv2/core/core.hpp>
@@ -11,217 +15,197 @@
 using namespace cv;
 using namespace std;
 
-// See www.asciitable.com
-#define ESCAPE_KEY (27)
-#define SYSTEM_ERROR (-1)
-#define ROIX (300)
-#define ROIY (50)
-#define SRCX (1280)
-#define SRCY (720)
+#include "../utils/labelColors.h"
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-   const char* default_file = "0";
-   const char* filename = argc >=2 ? argv[1] : default_file;
-   VideoCapture cap;
-   if (*filename == '0') {
-     cap.open(0);
-   } else {
-     cap.open(filename);
-   }
-   bool canView = 0;
-   namedWindow(filename);
-   char winInput;
-   int waitval=100;
-   bool origView=1,tview=1;
+    const char *default_file = "0";
+    const char *filename = argc >= 2 ? argv[1] : default_file;
+    const char* output_file = "vout.csv";
+    const char* out_filename = argc >=3 ? argv[2] : output_file;
+    ofstream outfile;
+    outfile.open(out_filename);
+    VideoCapture cap;
+    if (*filename == '0')
+    {
+        cap.open(0);
+    }
+    else
+    {
+        cap.open(filename);
+    }
+    bool canView = 0;
+//    namedWindow(filename);
+    char winInput;
+    int waitval = 1;
+    bool origView = 1, tview = 1;
+    int cnt=0;
+    Mat gray, blurred, threshed, edges;
+    vector<Vec4i> top_lines, last_lines;
+    bool hadPr=0,hadR=0,hadPh=0,hadL=0,hadO=0,hadD=0;
+
+    while (true)
+    {
+        // Read a frame from the video capture device
+        Mat frame;
+        cap.read(frame);
+        if (frame.empty())
+        {
+            break;
+        }
+        cnt++;
+        // Apply pre-processing to the frame
+        cvtColor(frame, gray, COLOR_BGR2GRAY);
+        GaussianBlur(gray, blurred, Size(3, 3), 0);
+        int maxthresh = threshold(blurred,threshed,0,255,THRESH_BINARY + THRESH_OTSU);
+        int minthresh = maxthresh / 2;
+        maxthresh = (maxthresh < 10) ? 255: maxthresh;
+        minthresh = (maxthresh == 255) ? 255: minthresh;
+        Canny(blurred, edges, minthresh, maxthresh);
+
+        // Detect lines in the image using HoughLinesP
+        vector<Vec4i> lines;
+        HoughLinesP(edges, lines, 1, CV_PI / 180, 100, 175, 30);
+
+        // Filter the lines to keep only those that are roughly horizontal
+        vector<Vec4i> filtered_lines;
+        double angle_threshold = 15; // degrees
+        int hmax = 80,hmin = 40,wmax=300,wmin=175;
+        int ymin[6] = {960,960,960,960,960,960};
+        for (size_t i = 0; i < lines.size(); i++)
+        {
+            Vec4i l = lines[i];
+            double dx = l[2] - l[0];
+            double dy = l[3] - l[1];
+            double angle = abs(atan2(dy, dx) * 180 / CV_PI);
+            if (angle < angle_threshold || angle > 180 - angle_threshold){
+              if ( (dx >= wmin && dx <= wmax))
+               {
+                    filtered_lines.push_back(l);
+              }
+
+            }
+        }
+
+        last_lines = top_lines;
+        top_lines.clear();
+
+        for (int i = 0; i < 7; i++)
+        {
+          for (size_t j = 0; j < filtered_lines.size(); j++)
+          {
+             Vec4i l = filtered_lines[j];
+             if(i == 0) 
+             {
+                  if(ymin[0] > l[1])
+                  {
+                    ymin[0]=l[1];
+                  }
+              } 
+              else
+              { 
+                if(l[1] == ymin[i-1])
+                {
+                    top_lines.push_back(l);
+                }
+                if(ymin[i] > l[1] && l[1] > ymin[i-1] + 100 && i != 6) 
+                {
+                    ymin[i]=l[1];
+                 }
+              }
+          }
+        }
+        bool hasPr=0,hasR=0,hasPh=0,hasL=0,hasO=0,hasD=0;
+        for(size_t i = 0; i < top_lines.size(); i++)
+        {
+          Vec4i l = top_lines[i];
+          int x1,x2,y1,y2;
+
+          if(top_lines.size()==last_lines.size())
+          {
+            Vec4i l2 = last_lines[i];
+            x1 = (l[0]-100+l2[0]-100)/2;
+            x2 = (l[0]+300+l2[0]+300)/2;
+            y1 = (l[1]-25+l2[1]-25)/2;
+            y2 = (l[1]+75+l2[1]+75)/2;
+          } else {
+
+            x1 = l[0]-100;
+            x2 = l[0]+300;
+            y1 = l[1]-25;
+            y2 = l[1]+75;
+          }
+
+          rectangle(frame,Point(x1,y1),Point(x2,y2),Scalar(0,255,0),5,0);
+
+
+          if(frame.cols - x1 > 400 && x1 > 100 && frame.rows - y1 > 100 && y1 > 25)
+          {
+            Mat syringeLabel = frame(Rect(x1,y1,400,100));
+            switch(labelColors(syringeLabel,1,1,1,1,1,1))
+            {
+              case 1: hasPr=1; break;
+              case 2: hasR=1; break;
+              case 3: hasPh=1; break;
+              case 4: hasL=1; break;
+              case 5: hasD=1; break;
+              case 6: hasO=1; break;
+            }
+          }
+
+
+        }
+
+      std:string msecs = to_string(int(cap.get(CAP_PROP_POS_MSEC)));
+      if(hasR!=hadR)
+      {
+        hadR=hasR;
+        outfile << "Rocuronium" << "," << msecs << endl;      
+      }
+      else if(hasPr!=hadPr)
+      {
+        hadPr=hasPr;
+        outfile << "Propofol" << "," << msecs << endl;      
+      }
+      else if(hasPh!=hadPh)
+      {
+        hadPh=hasPh;
+        outfile << "Phenylephrine" << "," << msecs << endl;      
+      }
+      else if(hasL!=hadL)
+      {
+        hadL=hasL;
+        outfile << "Lidocaine" << "," << msecs << endl;      
+      }
+      else if(hasO!=hadO)
+      {
+        hadO=hasO;
+        outfile << "Odanestron" << "," << msecs << endl;      
+      }
+      else if(hasD!=hadD)
+      {
+        hadD=hasD;
+        outfile << "Dexamethasone" << "," << msecs << endl;      
+      }
+      
+      if(origView)
+      {
+//        imshow(filename, frame);
+      } else {
+//        imshow(filename, edges);
+      }
+
+
+        // Wait for a key press and check if it's the ESC key
 
 /*
-   VideoWriter vout;
-    Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
-                  (int) cap.get(CAP_PROP_FRAME_HEIGHT));
-
-   vout.open("lines.mp4", VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
-*/
-
-   printf("Press space to pause/unpause, 's' to step frame by frame, 'c' to switch views or 'esc' to exit\n");
-   int cnt = 0;
-   vector<vector<Vec4i>> linehistory;
-   while (1)
-   {
-      Mat src,roisrc;
-      cnt++;
-      
-      cap.read(src);
-      if(src.empty()){
-        break;
-      }
-      //store mat variables
-      Mat dst,gray;
-      Mat gray1,gray2,gray3;
-
-       gray = src.clone();
-       int gval = 0,bval=0,rval=0;
-       int myhist[256] = {0};
-
-       //to focus on just the mousepad area
-       roisrc=src(Rect(ROIX,ROIY,SRCX-ROIX,SRCY-ROIY));
-//      GaussianBlur(src,gray, Size(81,81), 3);
-//       bilateralFilter(src,gray,4,8,2);
-
-       for(int j=0;j<src.rows-2;j++)
-       {
-//         int scandown = 0;
-         for(int i=0;i<src.cols;i++)
-         {
-             bval = gray.at<Vec3b>(j,i)[0];
-             gval = gray.at<Vec3b>(j,i)[1];
-             rval = gray.at<Vec3b>(j,i)[2];
-//             bval=bval+(8-bval%8);gval=gval+(8-gval%8);rval=rval+(8-rval%8);
-             if(abs(bval-gval)>10 || abs(rval-gval)>10 || abs(rval-bval)>10) {gval=0;}
-             else 
-             {
-//                     scandown--;
-//                    if(gval>240){scandown=50;}
-//                    if(scandown<0) {gval=0;}
-//                    gval=(gval>150)?gval:255;
-
-
-//                  gval=gval+(64-gval%64);
-
-
-//                  gval=int((float)gval*((float)gval/255));
-
-//                  if(gval>255){gval=255;}           
-//                  if(gval>64&&gval<192){gval=0;}       
-
-
-//                  gval=(gval<50)?0:(gval<200)?128:(gval<225)?196:255;
-//                  gval=(gval<100)?0:((gval>240)?255:gval/2);                 
-             }
-             myhist[gval]++;
-//             gray.at<Vec3b>(j,i)[0]=gval;
-//             gray.at<Vec3b>(j,i)[1]=gval;
-//             gray.at<Vec3b>(j,i)[2]=gval;
-         }
-       }
-
-//       bilateralFilter(gray,dst,16,32,8);
-
-//      GaussianBlur(gray,src, Size(9,9), 3);
-//      addWeighted(gray,1.5,src,-0.5,0,src);
-//      gray.convertTo(gray,-1,1,-200);
-//      gray.convertTo(gray,-1,2,0);
-//      gray.convertTo(gray,-1,1,-50);
-//      gray.convertTo(gray,-1,2,0);
-//      gray.convertTo(gray,-1,1,-50);
-//      gray.convertTo(gray,-1,2,0);
-//      gray.convertTo(gray,-1,1,-100);
-//      gray.convertTo(gray,-1,1.5,0);
-
-//        dst = gray.clone();
-
-//      gray = src.clone();
-//      threshold(gray,dst,150,255,THRESH_BINARY);
-//dst = gray.clone();
-//      GaussianBlur(gray, gray, Size(9,9), 2, 2);
-
-
-      // Edge detection with thresholds of param3 to param4 intensity for hysteresis with param5xparam5 sobel and default l1 norm 
-
-
-//      Canny(gray, dst, 100, 100, 3);
-//      cv::cvtColor(src, gray, COLOR_BGR2GRAY);
-      Canny(roisrc, dst, 1, 225, 3);
-
-
-
-      vector<Vec4i> linesP; // will hold the results of the detection
-      vector<Vec4i> parallels; //will store the parallel lines
-      HoughLinesP(dst, linesP, 1, CV_PI/180, 20, 75, 10 ); // runs the actual detection
-
-      cout << "Lines from new Frame:" << endl;
-      
-      //for loop to go through the linesP vector
-      for( size_t i = 0; i < linesP.size(); i++ )
-      {
-        //calculating the slope
-        float slope=0;
-        //flag to detect if parallel or not
-        bool hasparallel=0;
-        //Store each vector element 
-        Vec4i l = linesP[i];
-        //prints the x1, x2, y1, y2 coordinate 
-        cout << l[0] << " " << l[1] << " " << l[2] << " " << l[3] << endl;
-        //calculate the slop y2-y1, x2 -x1
-        slope = (float)(l[3]-l[1])/(float)(l[2]-l[0]);
-        //print the slope
-        cout << slope <<endl;
-        //go through the second line detected
-        for( size_t j = 0; j < linesP.size(); j++ )
-        {
-          //store the vector element for the second line
-           Vec4i l2 = linesP[j];
-           //calcylate the slope (y2-y1)/(x2-x1)
-           float slope2 = (float)(l2[3]-l2[1])/(float)(l2[2]-l2[0]);
-           //checking againest the first slope
-           cout << "checking against slope "<<slope2<<endl;
-           //finding the difference of the slopes of both lines
-           float slopediff = abs(slope-slope2);
-           //if the difference is less than 0.3 than it is parallel
-           cout<< "Difference #" << j << " " << slopediff << endl;
-           //update the hasparrallel flag to 1
-           if(slopediff <0.3){cout<<"Parallel line found " << endl;hasparallel=1;}
-        }
-        //if it is parallel, then we display the lines, and add it to the parallel vector
-        if(hasparallel){
-        line( src, Point(l[0]+ROIX, l[1]+ROIY), Point(l[2]+ROIX, l[3]+ROIY), Scalar(0,0,255), 3, LINE_AA);
-        parallels.push_back(linesP[i]);
-        }
-      }
-      //otherwise we push it to the line history vector
-      if(parallels.size()>0){
-      linehistory.push_back(parallels);
-      }
-      //will print the line history elements
-      cout << "Line History " << endl;
-      for(int x=linehistory.size();x>((linehistory.size()>10)?linehistory.size()-10:0);x--){
-        //for each frame number
-        cout << "frame #" << x << endl;
-
-        vector<Vec4i> linesP = linehistory[x-1];
-
-        cout << linesP.size() << endl;
-
-        for( size_t i = 0; i < linesP.size(); i++ ) {
-
-          Vec4i l = linesP[i];
-
-          cout << l[0] << " " << l[1] << " " << l[2] << " " << l[3] << endl;
-        }
-      }
-
-      if (origView)
-      {
-        imshow(filename, src);
-      } else if(tview) {
-        imshow(filename,gray);
-//      } else { 
-//        imshow(filename,dst);
-      }
-//      vout.write(src);
-
-      if ((winInput = waitKey(waitval)) == ESCAPE_KEY)
+      if ((winInput = waitKey(waitval)) == 27)
       {
           break;
       }
       else if(winInput == 's') 
       {
           waitval = 0;
-      }
-      else if(winInput == 'h') 
-      {
-          int total=0;
-          for(int i=0;i<256;i++){if(myhist[i]>0){cout<<i<<" "<<myhist[i]<<endl;total+=myhist[i];}}
       }
       else if(winInput == ' ') 
       {
@@ -231,11 +215,12 @@ int main(int argc, char** argv)
       {
           origView = origView ? 0 : 1; //flip flag to show original or difference
       }
-      else if(winInput == 't') 
-      {
-          tview = tview ? 0 : 1; //flip flag to show original or difference
-      }
+*/
+    }
 
-   }
-   destroyWindow(filename); 
+    // Release the video capture device and destroy the window
+    cap.release();
+//    destroyAllWindows();
+
+    return 0;
 }
