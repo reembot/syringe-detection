@@ -209,6 +209,7 @@ int main(int argc, char** argv) {
                 } else {
                     // take timestamp
                     std:string msecs = to_string(int(cap.get(CAP_PROP_POS_MSEC)));
+                    
                     if ( found ) {     // did not have before (single true)
                         had_label[label] = true;
                         cout << label << " entered." << endl;
