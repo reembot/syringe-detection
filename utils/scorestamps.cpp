@@ -1,39 +1,10 @@
-/*
- *
- *  Example by Sam Siewert 
- *
- *  Created for OpenCV 4.x for Jetson Nano 2g, based upon
- *  https://docs.opencv.org/4.1.1
- *
- *  Tested with JetPack 4.6 which installs OpenCV 4.1.1
- *  (https://developer.nvidia.com/embedded/jetpack)
- *
- *  Based upon earlier simpler-capture examples created
- *  for OpenCV 2.x and 3.x (C and C++ mixed API) which show
- *  how to use OpenCV instead of lower level V4L2 API for the
- *  Linux UVC driver.
- *
- *  Verify your hardware and OS configuration with:
- *  1) lsusb
- *  2) ls -l /dev/video*
- *  3) dmesg | grep UVC
- *
- *  Note that OpenCV 4.x only supports the C++ API
- *
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <string>
 
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/highgui.hpp"
-#include "opencv2/imgproc.hpp"
-
-#include <opencv2/videoio.hpp>  // Video write
-
-using namespace cv;
 using namespace std;
 
 // See www.asciitable.com
@@ -55,7 +26,7 @@ int main(int argc, char** argv)
    const char* input_tfile = "../explore/voutPrcolor1.csv";
    const char* in_filename = argc >=2 ? argv[1] : input_file;
    const char* in_tfilename = argc >=3 ? argv[2] : input_tfile;
-   String med, medtime, testmed, testtime, oldmedtime,oldtesttime;
+   std:string med, medtime, testmed, testtime, oldmedtime,oldtesttime;
    ifstream infile, intfile;
    infile.open(in_filename);
    intfile.open(in_tfilename);
@@ -71,8 +42,11 @@ int main(int argc, char** argv)
      std::getline(intfile,testtime);
    }
 
+//   cout << "test1" << endl;
+
    while (1)
    {
+//      std::cout << testtime << " " << testmed << medtime << med << endl;
       msec+=100;
       if (to_string(msec) == medtime)
       {
@@ -109,6 +83,8 @@ int main(int argc, char** argv)
       }
       if (to_string(msec) == testtime)
       {
+        do 
+        {
         if(testmed == "Propofol")
         {
           testPropofol = testPropofol ? 0 : 1;
@@ -138,24 +114,10 @@ int main(int argc, char** argv)
           std::getline(intfile,testmed,',');
           oldtesttime = testtime;
           std::getline(intfile,testtime);
-          if(testtime==oldtesttime) //corner case for white labels
-          {
-            if (testmed == "Odanestron") 
-            {
-              testOdanestron = testOdanestron ? 0 : 1;
-            }
-            else if (testmed == "Dexamethasone") 
-            {
-              testDexamethasone = testDexamethasone ? 0 : 1;
-            }
-            if (intfile.good()) 
-            {
-              std::getline(intfile,testmed,',');
-              oldtesttime = testtime;
-              std::getline(intfile,testtime);
-            }
-          }
+        }
+//        cout << "testmed " << testmed << " testtime " << testtime << " oldtesttime " << oldtesttime << " eof " << intfile.eof() << endl;
         } 
+        while(testtime==oldtesttime && intfile.eof() != 1); //corner case for white labels
       }
 
       if(hasPropofol && testPropofol) { tp++; Prtp++; }
@@ -197,7 +159,6 @@ int main(int argc, char** argv)
       std::cout << med << endl;
 */
       if(oldtesttime == testtime && oldmedtime == medtime) { break; }
-
    }
    infile.close();
    intfile.close();
