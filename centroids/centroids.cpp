@@ -131,17 +131,17 @@ int main(int argc, char** argv) {
     bounding_box prev_bbox(src.rows, src.cols);
     bounding_box bbox(src.rows, src.cols);
 
-    unordered_map<string,bounding_box*> label_boxes;
+    //unordered_map<string,bounding_box*> label_boxes;
     unordered_map<string,bool> had_label;
     vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine", "Odanestron", "Lidocaine", "Dexamethasone"};
     //vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine", "Odanestron", "Lidocaine"};
 
     for ( string label : labels ) {
-        label_boxes.insert( pair<string,bounding_box*>(label, new bounding_box(src.rows, src.cols)) );
+        //label_boxes.insert( pair<string,bounding_box*>(label, new bounding_box(src.rows, src.cols)) );
         had_label.insert( pair<string,bool>(label,false) );
     }
 
-
+	cout << "Press any key to pause, or ESC to quit." << endl;
     while (1) {
         count++;
       
@@ -189,8 +189,8 @@ int main(int argc, char** argv) {
 		// calculate change in area between current and last movement box
         int areaChange = int( ((bbox.area() - prev_bbox.area()) / prev_bbox.area()) *100);
 		
-		// if shrank by more than 50% (hand drops a syringe)
-        if ( areaChange < 0 && areaChange < -50 ) { 
+		// if shrank by more than 70% (hand drops a syringe)
+        if ( areaChange < 0 && areaChange < -70 ) { 
 			
 			//cout << "Area shrank by: " << abs(areaChange) << "%." << endl;
 
@@ -198,10 +198,11 @@ int main(int argc, char** argv) {
             for ( string label : labels ) {
 				
 				// reset bounding box
-                label_boxes[label]->clear();
+                //label_boxes[label]->clear();
 				
 				// check for label color existence 
-                bool found = colorScan(src, prev_bbox, label_boxes[label], label);
+                //bool found = colorScan(src, prev_bbox, label_boxes[label], label);
+                bool found = colorScan(src, prev_bbox, label);
 
                 if ( had_label[label] && found ) { // if label is still there (both true)
 					//cout << label << " persisted." << endl;
@@ -212,12 +213,13 @@ int main(int argc, char** argv) {
                     
                     if ( found ) {     // did not have before (single true)
                         had_label[label] = true;
-                        cout << label << " entered." << endl;
+                        //cout << label << " entered." << endl;
                         outfile << label << "," << msecs << endl;
 
                     } else if ( had_label[label] ) { // had before, but no longer
                         had_label[label] = false;
-                        cout << label << " left." << endl;
+                        //cout << label << " left." << endl;
+                        outfile << label << "," << msecs << endl;
                             
                     } else { // both false, was not there previously nor entered
 						continue;
@@ -227,7 +229,7 @@ int main(int argc, char** argv) {
         }
         
         
-        //if ( show == "show" ) {
+        if ( strcmp(show, "show") == 0 ) {
 
             int position = 50;
             for ( string label : labels ) {
@@ -252,16 +254,17 @@ int main(int argc, char** argv) {
                 }
             }
             imshow(filename, src);
-            waitKey(10);
-        //}
+            if( (winInput = waitKey(10)) == ' ') waitKey(0);
+        }
+        if( (winInput = waitKey(10)) == ESCAPE_KEY) break;
 
         // save bbox history
         prev_bbox = bbox;
         bbox.clear();
     }
 
-    for ( string label : labels )
-		delete label_boxes[label];
+    //for ( string label : labels )
+	//	delete label_boxes[label];
     cap.release();
     return 0;
 }
