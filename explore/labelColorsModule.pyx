@@ -23,7 +23,7 @@ def labelColors(frame, checkR, checkPr, checkPh, checkL, checkO, checkD):
             #check for yellow colors where red is highest followed closely by green with almost no blue
             if ((rval > 96) and (rval-bval > rval/3) and (bval < 32)  and (gval < rval * 9 / 10) and (gval > 3 * rval / 5) ):
                 countPr+=1  
-                if(checkPr and countPr > 1000):
+                if(checkPr and countPr > 500):
                     return 1
             #check for mostly red color
             elif( (rval > 200) and (bval < 64) and (gval < 96) ):
@@ -31,9 +31,9 @@ def labelColors(frame, checkR, checkPr, checkPh, checkL, checkO, checkD):
                 if(checkR and countR > 1000):
                     return 2
             #check for light purple where most values are high and green is 1/2-3/4 of red
-            elif( (rval > 128) and (bval > 128) and (gval < 3 * rval / 4) and (gval > rval / 2) ):
+            elif( (rval > 160) and (bval > 160) and (gval < 3 * rval / 4) and (gval > rval / 2) ):
                 countPh+=1
-                if(checkPh and countPh > 1000):
+                if(checkPh and countPh > 2000):
                     return 3
             #check for non-color values (gray and white)
             elif ( (abs(rval-gval) < 20) and (abs(rval-bval) < 20) and (abs(gval-bval) < 20) ):
