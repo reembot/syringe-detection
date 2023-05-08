@@ -5,13 +5,13 @@ def labelColors(frame, checkR, checkPr, checkPh, checkL, checkO, checkD):
     countL=0
     countW=0     
     #loop through every pixel or until a new medication label is detected
-#    for j in range(frame.shape[0]):
-#        for i in range(frame.shape[1]):
-    for j in range(0,2):
-        for i in range(0,2):
+    for j in range(frame.shape[0]):
+        for i in range(frame.shape[1]):
+#    for j in range(0,2):
+#        for i in range(0,2):
             #get bgr values
             bval, gval, rval = frame[j,i]
-            print(bval, gval, rval)
+#            print(bval, gval, rval)
             #check for yellow colors where red is highest followed closely by green with almost no blue
             if ((rval > 96) and (rval-bval > rval/3) and (bval < 32)  and (gval < rval * 9 / 10) and (gval > 3 * rval / 5) ):
                 countPr+=1  
@@ -25,7 +25,7 @@ def labelColors(frame, checkR, checkPr, checkPh, checkL, checkO, checkD):
             #check for light purple where most values are high and green is 1/2-3/4 of red
             elif( (rval > 128) and (bval > 128) and (gval < 3 * rval / 4) and (gval > rval / 2) ):
                 countPh+=1
-                if(checkPh and countPh > 1000):
+                if(checkPh and countPh > 2000):
                     return 3
             #check for non-color values (gray and white)
             elif ( (abs(rval-gval) < 20) and (abs(rval-bval) < 20) and (abs(gval-bval) < 20) ):
