@@ -1,0 +1,56 @@
+../data/Propofol.csv,../tests/centroids-Propofol.csv,Propofol,224,52,283,32,591,87.5,15.5224,81.1594,85.7868,84.2105
+../data/Propofol.csv,../tests/centroids-Propofol.csv,Lidocaine,0,26,565,0,591,nan,4.39932,0,95.6007,0
+../data/Propofol.csv,../tests/centroids-Propofol.csv,Dexamethasone,0,9,582,0,591,nan,1.52284,0,98.4772,0
+../data/Propofol.csv,../tests/centroids-Propofol.csv,All Video Meds (3),224,87,3203,32,3546,87.5,2.64438,72.0257,96.6441,79.0123
+../data/Rocuronium.csv,../tests/centroids-Rocuronium.csv,Rocuronium,264,43,262,16,585,94.2857,14.0984,85.9935,89.9145,89.9489
+../data/Rocuronium.csv,../tests/centroids-Rocuronium.csv,Phenylephrine,0,14,571,0,585,nan,2.39316,0,97.6068,0
+../data/Rocuronium.csv,../tests/centroids-Rocuronium.csv,Lidocaine,0,128,457,0,585,nan,21.8803,0,78.1197,0
+../data/Rocuronium.csv,../tests/centroids-Rocuronium.csv,Dexamethasone,0,18,567,0,585,nan,3.07692,0,96.9231,0
+../data/Rocuronium.csv,../tests/centroids-Rocuronium.csv,All Video Meds (4),264,203,3027,16,3510,94.2857,6.28483,56.531,93.7607,70.6827
+../data/Phenylephrine.csv,../tests/centroids-Phenylephrine.csv,Phenylephrine,137,26,287,128,578,51.6981,8.30671,84.0491,73.3564,64.0187
+../data/Phenylephrine.csv,../tests/centroids-Phenylephrine.csv,Lidocaine,0,7,571,0,578,nan,1.21107,0,98.7889,0
+../data/Phenylephrine.csv,../tests/centroids-Phenylephrine.csv,All Video Meds (2),137,33,3170,128,3468,51.6981,1.03028,80.5882,95.3576,62.9885
+../data/Lidocaine.csv,../tests/centroids-Lidocaine.csv,Phenylephrine,0,5,575,0,580,nan,0.862069,0,99.1379,0
+../data/Lidocaine.csv,../tests/centroids-Lidocaine.csv,Lidocaine,244,38,250,48,580,83.5616,13.1944,86.5248,85.1724,85.0174
+../data/Lidocaine.csv,../tests/centroids-Lidocaine.csv,All Video Meds (2),244,43,3145,48,3480,83.5616,1.34881,85.0174,97.3851,84.2832
+../data/Dexamethasone.csv,../tests/centroids-Dexamethasone.csv,Lidocaine,0,220,370,0,590,nan,37.2881,0,62.7119,0
+../data/Dexamethasone.csv,../tests/centroids-Dexamethasone.csv,Odanestron,0,25,565,0,590,nan,4.23729,0,95.7627,0
+../data/Dexamethasone.csv,../tests/centroids-Dexamethasone.csv,Dexamethasone,165,31,281,113,590,59.3525,9.9359,84.1837,75.5932,69.6203
+../data/Dexamethasone.csv,../tests/centroids-Dexamethasone.csv,All Video Meds (3),165,276,2986,113,3540,59.3525,8.46107,37.415,89.0113,45.8971
+../data/Odanestron.csv,../tests/centroids-Odanestron.csv,Lidocaine,0,223,340,0,563,nan,39.6092,0,60.3908,0
+../data/Odanestron.csv,../tests/centroids-Odanestron.csv,Odanestron,28,3,283,249,563,10.1083,1.04895,90.3226,55.2398,18.1818
+../data/Odanestron.csv,../tests/centroids-Odanestron.csv,Dexamethasone,0,223,340,0,563,nan,39.6092,0,60.3908,0
+../data/Odanestron.csv,../tests/centroids-Odanestron.csv,All Video Meds (3),28,449,2652,249,3378,10.1083,14.4792,5.87002,79.3369,7.42706
+../data/2_label.csv,../tests/centroids-2_label.csv,Propofol,344,19,155,16,534,95.5556,10.9195,94.7658,93.4457,95.1591
+../data/2_label.csv,../tests/centroids-2_label.csv,Rocuronium,330,11,181,12,534,96.4912,5.72917,96.7742,95.6929,96.6325
+../data/2_label.csv,../tests/centroids-2_label.csv,Lidocaine,0,333,201,0,534,nan,62.3595,0,37.6404,0
+../data/2_label.csv,../tests/centroids-2_label.csv,All Video Meds (3),674,363,2139,28,3204,96.0114,14.5084,64.9952,87.7965,77.5158
+../data/3_label.csv,../tests/centroids-3_label.csv,Propofol,494,3,92,2,591,99.5968,3.15789,99.3964,99.154,99.4965
+../data/3_label.csv,../tests/centroids-3_label.csv,Rocuronium,408,11,157,15,591,96.4539,6.54762,97.3747,95.6007,96.9121
+../data/3_label.csv,../tests/centroids-3_label.csv,Phenylephrine,266,3,223,99,591,72.8767,1.32743,98.8848,82.7411,83.9117
+../data/3_label.csv,../tests/centroids-3_label.csv,Lidocaine,0,503,88,0,591,nan,85.11,0,14.89,0
+../data/3_label.csv,../tests/centroids-3_label.csv,All Video Meds (4),1168,520,1742,116,3546,90.9657,22.9885,69.1943,82.0643,78.6003
+../data/4_label.csv,../tests/centroids-4_label.csv,Propofol,467,9,77,9,562,98.1092,10.4651,98.1092,96.7971,98.1092
+../data/4_label.csv,../tests/centroids-4_label.csv,Rocuronium,418,8,132,4,562,99.0521,5.71429,98.1221,97.8648,98.5849
+../data/4_label.csv,../tests/centroids-4_label.csv,Phenylephrine,378,5,176,3,562,99.2126,2.76243,98.6945,98.5765,98.9529
+../data/4_label.csv,../tests/centroids-4_label.csv,Lidocaine,331,140,91,0,562,100,60.6061,70.276,75.089,82.5436
+../data/4_label.csv,../tests/centroids-4_label.csv,All Video Meds (4),1594,162,1600,16,3372,99.0062,9.1941,90.7745,94.7212,94.7118
+../data/5_label.csv,../tests/centroids-5_label.csv,Propofol,488,6,89,5,588,98.9858,6.31579,98.7854,98.1293,98.8855
+../data/5_label.csv,../tests/centroids-5_label.csv,Rocuronium,426,6,149,7,588,98.3834,3.87097,98.6111,97.7891,98.4971
+../data/5_label.csv,../tests/centroids-5_label.csv,Phenylephrine,374,9,201,4,588,98.9418,4.28571,97.6501,97.7891,98.2917
+../data/5_label.csv,../tests/centroids-5_label.csv,Lidocaine,352,128,108,0,588,100,54.2373,73.3333,78.2313,84.6154
+../data/5_label.csv,../tests/centroids-5_label.csv,Odanestron,43,0,230,315,588,12.0112,0,100,46.4286,21.4464
+../data/5_label.csv,../tests/centroids-5_label.csv,Dexamethasone,0,352,236,0,588,nan,59.8639,0,40.1361,0
+../data/5_label.csv,../tests/centroids-5_label.csv,All Video Meds (6),1683,501,1013,331,3528,83.565,33.0911,77.0604,76.4172,80.181
+../data/6_label.csv,../tests/centroids-6_label.csv,Propofol,511,13,67,0,591,100,16.25,97.5191,97.8003,98.744
+../data/6_label.csv,../tests/centroids-6_label.csv,Rocuronium,461,4,120,6,591,98.7152,3.22581,99.1398,98.308,98.927
+../data/6_label.csv,../tests/centroids-6_label.csv,Phenylephrine,368,3,169,51,591,87.8282,1.74419,99.1914,90.8629,93.1646
+../data/6_label.csv,../tests/centroids-6_label.csv,Lidocaine,375,139,77,0,591,100,64.3519,72.9572,76.4805,84.3645
+../data/6_label.csv,../tests/centroids-6_label.csv,Odanestron,75,0,226,290,591,20.5479,0,100,50.9306,34.0909
+../data/6_label.csv,../tests/centroids-6_label.csv,Dexamethasone,320,40,231,0,591,100,14.7601,88.8889,93.2318,94.1176
+../data/6_label.csv,../tests/centroids-6_label.csv,All Video Meds (6),2110,199,890,347,3546,85.8771,18.2736,91.3815,84.6024,88.5439
+../data/no_color.csv,../tests/centroids-no_color.csv,Lidocaine,0,519,47,0,566,nan,91.6961,0,8.30389,0
+../data/no_color.csv,../tests/centroids-no_color.csv,Odanestron,221,11,165,169,566,56.6667,6.25,95.2586,68.1979,71.0611
+../data/no_color.csv,../tests/centroids-no_color.csv,Dexamethasone,395,124,47,0,566,100,72.5146,76.1079,78.0919,86.4333
+../data/no_color.csv,../tests/centroids-no_color.csv,All Video Meds (3),616,654,1957,169,3396,78.4713,25.0479,48.5039,75.7656,59.9513
+../data/blank.csv,../tests/centroids-blank.csv,All Video Meds (0),0,0,6,0,6,nan,0,nan,100,nan

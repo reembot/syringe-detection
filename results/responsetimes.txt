@@ -1,0 +1,10 @@
+Centroid Average Response Time Difference (ms)
+1562
+HOGSVM Average Response Time Difference (ms)
+2734
+Lines Average Response Time Difference (ms)
+3020
+OCR Average Response Time Difference (ms)
+2712
+Total Average Response Time Difference (ms)
+2507

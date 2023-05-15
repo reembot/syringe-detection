@@ -19,6 +19,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+//begins with generic io setup for OpenCV frame capturing, window display and label output in csv format
    const char* default_file = "0";
    const char* output_file = "vout.csv";
    const char* filename = argc >=2 ? argv[1] : default_file;
@@ -32,37 +33,29 @@ int main(int argc, char** argv)
    } else {
      cap.open(filename);
    }
-//   bool origView=1,hasRoc=0,hadRoc=0,hasProp=0,hadProp=0,hasPhen=0,hadPhen=0,hasLid=0,hadLid=0,hasOd=0,hadOd=0,hasDex=0,hadDex=0;
-   bool origView=1;
-   bool hadRoc=0,hadProp=0,hadPhen=0,hadLid=0,hadOd=0,hadDex=0;
-   int pW1x=0,pW1y=0,pW2x=0,pW2y=0;
-   int prevStamp=0;
-//   namedWindow(filename);
-//   namedWindow("zoomed");
-//   namedWindow("canned");
+   namedWindow(filename);
    char winInput;
 
-   Mat src, roisrc, srcSeg, srcSeg2, srcSegSum, prevroi, srcclone, dst, gray,threshed,canned,subshow;
-   Mat matPr,matR,matPh,matL,matD;
-   int showMat = 0;
+   printf("Press space to pause and unpause, 's' to step through each frame, 'p' to print frame into video folder or 'esc' to exit\n");
 
+
+//setup mats for various transforms
+   Mat src, roisrc, srcSegSum, prevroi, srcclone, dst, gray,threshed,canned,subshow, matPr;
+//flags to keep track of medication label detections per frame
+   bool hadRoc=0,hadProp=0,hadPhen=0,hadLid=0,hadOd=0,hadDex=0;
+
+//before looping and processing, skip very first frame to use it as the first previous frame
    cap.read(src);
    if(src.empty())
    {
      return 0;
    }
-   srcSeg = src.clone();
    dst = src.clone();
+   cvtColor(dst, gray, COLOR_BGR2GRAY);
+   Canny(gray, canned, 35, 70);
    int cnt=0,circnt=0;
 
-//   VideoWriter vout;
-//   Size S = Size((int) cap.get(CAP_PROP_FRAME_WIDTH),    // Acquire input size
-//                  (int) cap.get(CAP_PROP_FRAME_HEIGHT));
-
-//   vout.open("colors.mp4", VideoWriter::fourcc('H','2','6','4'), cap.get(CAP_PROP_FPS), S, true);
-
-//   printf("Press space to pause and unpause, 's' to step through each frame, 'c' to switch views or 'esc' to exit\n");
-
+//begin main loop
    while (1)
    {
       cnt++;
@@ -73,19 +66,24 @@ int main(int argc, char** argv)
       }
       
       srcclone = src.clone();
-      roisrc = srcclone(Rect(150,75,750,885));
+//set region of interest as cloned frame
+      roisrc = srcclone(Rect(150,75,768,880));
+//setup frame to highlight detected pixels
       matPr = roisrc.clone();
-      matR = matPr.clone();
-      matPh = matPr.clone();
-      matL = matPr.clone();
-      matD = matPr.clone();
 
+//current and previous color values in float for ratio comparisons
       float bval=0,gval=0,rval=0,bval2=0,gval2=0,rval2=0;
 
+//rowbuffer in pixels for white label circle detection to skip as syringe labels will always be farther apart than this
       int rowbuff = 75;
-      int W1x=0,W1y=0,W2x=0,W2y=0;
 
+//setup white label top right x and y variables 
+      int W1x=0,W1y=0;
+
+//counts for each pixel type
       int countR=0,countPr=0,countPh=0,countL=0,countW=0;
+
+//flags for existing detections
       bool hasRoc=0,hasProp=0,hasPhen=0,hasLid=0,hasOd=0,hasDex=0;
 
 //skip first frame to setup previous for frame differencing
@@ -93,10 +91,11 @@ int main(int argc, char** argv)
       {
      
 //loop through every pixel or until a new medication label is detected
-      for(int j=0;j<roisrc.rows && !hasProp && !hasRoc && !hasPhen && !hasLid && !hasOd && !hasDex;j++)
+      for(int j=0;j<roisrc.rows; j++)
       {
-        for(int i=0;i<roisrc.cols && !hasProp && !hasRoc && !hasPhen && !hasLid && !hasOd && !hasDex;i++)
+        for(int i=0;i<roisrc.cols; i++)
         {
+
 //get values for current and previous frames
            bval = (float)roisrc.at<Vec3b>(j,i)[0];           
            gval = (float)roisrc.at<Vec3b>(j,i)[1];           
@@ -174,41 +173,10 @@ int main(int argc, char** argv)
                {
                  W1x=i; 
                  W1y=j;
-//search for circles
 
-/*
-                 dst = srcclone(Rect(W1x,W1y,300,150));
-                 pyrUp(dst,dst,Size(dst.cols*2,dst.rows*2));
-                 pyrUp(dst,dst,Size(dst.cols*2,dst.rows*2));
-                 cvtColor(dst, gray, COLOR_BGR2GRAY);
-                 GaussianBlur(gray, gray, Size(3, 3), 0);
-                 vector<Vec3f> circles;
-                 HoughCircles(gray, circles, HOUGH_GRADIENT, 1, gray.rows/32, 50, 20, 20, 30);
-                 circnt+=circles.size();
-                 if(circles.size() > 0) { cout <<  cap.get(CAP_PROP_POS_MSEC) << endl; }
-                 for( size_t i = 0; i < circles.size(); i++ )
-                 {
-                   Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-                   int radius = cvRound(circles[i][2]);
-                   circle( dst, center, radius, Scalar(0,0,255), 3, 8, 0 );
-                 }
-/*
-                 if(!hadOd && !hasOd && circles.size() > 0)
-                 {
-                   hasOd=1;
-                   hadOd=1;
-                   outfile << "Odanestron gained from new med label with circles" << "," << cap.get(CAP_PROP_POS_MSEC) << endl;                   
-                 } 
-                 else if(!hasDex && !hadDex)
-                 {
-                   hasDex=1;
-                   hadDex=1;
-//                   outfile << "Dexamethasone gained from new med label with no circles" << "," << cap.get(CAP_PROP_POS_MSEC) << endl;                   
-                 }
-//*/
                } 
 //second text white label threshold does not need circle check as both types are now present
-               else if(W2x==0 && countW > 1000) 
+               else if(countW > 1000) 
                {
                  if(!hasOd && !hadOd) 
                  { 
@@ -233,7 +201,7 @@ int main(int argc, char** argv)
         }
       }
       }
-//if no need medications were detected then check counts to see if one was removed
+//if no new medications were detected then check counts to see if one was removed
       if (!hasProp && !hasRoc && !hasPhen && !hasLid && !hasOd && !hasDex)
       {
         if(hadProp && countPr <= 1000) 
@@ -269,6 +237,7 @@ int main(int argc, char** argv)
             outfile << "Odanestron" << "," << cap.get(CAP_PROP_POS_MSEC) << endl;
           }
         }
+//if only one white label left check for circles to determine which exists
         else if(countW <= 1000 && ( (!hadOd && !hadDex) || (hadOd && hadDex) || (hadDex && !hadOd) ) ) 
         { 
           dst = srcclone(Rect(W1x,W1y,300,150));
@@ -276,25 +245,9 @@ int main(int argc, char** argv)
           pyrUp(dst,dst,Size(dst.cols*2,dst.rows*2));
           cvtColor(dst, gray, COLOR_BGR2GRAY);
           GaussianBlur(gray, gray, Size(7, 7), 0);
-          vector<Vec3f> circles;
-          
-      int maxthresh = threshold(gray,threshed,0,255,THRESH_BINARY + THRESH_OTSU);
-      int minthresh = maxthresh / 2;
-      maxthresh = maxthresh-10;
-      minthresh = minthresh-5;
-      maxthresh = (maxthresh < 10) ? 255: maxthresh;
-      minthresh = (maxthresh == 255) ? 255: minthresh;
-//      Canny(gray, canned, minthresh, maxthresh+20);
-
-      Canny(gray, canned, 35, 70);
-
+          vector<Vec3f> circles;          
+          Canny(gray, canned, 35, 70);
           HoughCircles(gray, circles, HOUGH_GRADIENT, 1, gray.rows/32, 70, 20, 20, 35);
-
-//          HoughCircles(gray, circles, HOUGH_GRADIENT, 1, gray.rows/32, 60, 20, 20, 30); //60D,80O
-//          HoughCircles(gray, circles, HOUGH_GRADIENT, 1, gray.rows/32, 50, 20, 20, 30);
-//          HoughCircles(gray, circles, HOUGH_GRADIENT, 1, gray.rows/32, maxthresh, 20, 20, 30);
-//          cout << " Circles " << circles.size() << endl;
-
           circnt+=circles.size();
           for( size_t i = 0; i < circles.size(); i++ )
           {
@@ -306,12 +259,6 @@ int main(int argc, char** argv)
               putText(dst, to_string(radius), Point(100*(i+1),100), FONT_HERSHEY_COMPLEX_SMALL, 3, Scalar(0,0,255), 3, LINE_AA);
             }
           }
-
-//       resize(dst,subshow,Size(600,300));
-//       imshow("zoomed",subshow);
-//       resize(canned,subshow,Size(600,300));
-//       imshow("canned",subshow);
-
           if(circles.size() > 0)
           {
             if(hadDex)
@@ -332,7 +279,7 @@ int main(int argc, char** argv)
             hadDex=1; 
             outfile << "Dexamethasone" << "," << cap.get(CAP_PROP_POS_MSEC) << endl;
             }
-            if(hadOd) //unnecessary should not reach
+            if(hadOd)
             {
             hadOd=0;
             outfile << "Odanestron" << "," << cap.get(CAP_PROP_POS_MSEC) << endl;              
@@ -341,10 +288,7 @@ int main(int argc, char** argv)
         }
       }
 
-
-//      cout << countPr << " " << countR << " " << countPh << " " << countL << " " << countW << endl;
-
-
+//put names of medications that were detected on current frame
       if(hadRoc) {
         putText(src, "Rocuronium", Point(30,100), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA);
       }
@@ -366,29 +310,27 @@ int main(int argc, char** argv)
       if(hadDex) { 
         putText(src, "Dexamethasone", Point(30,300), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA); 
       }
-/*
-      showMat = 0;
-      if(showMat == 0) { srcSegSum = matPr.clone(); }
-      if(showMat == 1) { srcSegSum = matR.clone(); }
-      if(showMat == 2) { srcSegSum = matPh.clone(); }
-      if(showMat == 3) { srcSegSum = matL.clone(); }
-      if(showMat == 4) { srcSegSum = matD.clone(); }
-*/
-//      srcSegSum = dst.clone();
 
-/*      
-      if (origView)
-      {
-        imshow(filename,src);
-      } else {
-        imshow(filename,srcSegSum);
-      }
-*/      
+//combine and display original frame, frame with colors highlighted, frame with zoomed in label and circles and canny version of zoomed in label
+      srcSegSum = matPr.clone();
+      Mat colorcanned,resizedsrc, resizedseg, expanddst, expandcanned; 
+      Mat combinedh1,combinedh2,combinedv;
+      cvtColor(canned, colorcanned, COLOR_GRAY2BGR);
+      resize(dst,expanddst,Size(640,320));
+      resize(colorcanned,expandcanned,Size(640,320));
+      resize(src,resizedsrc,Size(640,480));
+      resize(srcSegSum,resizedseg,Size(640,480));
+      hconcat(resizedsrc,resizedseg,combinedh1);
+      hconcat(expanddst,expandcanned,combinedh2);
+      vconcat(combinedh1,combinedh2,combinedv);
+
+      imshow(filename,combinedv);
+
+//store previous frame for differencing
       prevroi = roisrc.clone();
 
-//      vout.write(src);
 
-/*
+//setup waitkey and get user input
       if ((winInput = waitKey(waitval)) == ESCAPE_KEY)
       {
           break;
@@ -401,23 +343,12 @@ int main(int argc, char** argv)
       {
           waitval = (waitval == 100) ? 0 : 100;
       }
-      else if(winInput == 'c') 
-      {
-          origView = origView ? 0 : 1; //flip flag to show original or difference
-      }
-      else if(winInput == 'm') 
-      {
-          showMat = (showMat > 3) ? 0 : showMat + 1; //flip flag to show original or difference
-      }
       else if(winInput == 'p') 
       {
           String imgname = filename + to_string(cnt) + ".png";
-          imwrite(imgname, src);
+          imwrite(imgname, combinedv);
       }
-*/
-
    }
-//   cout << "Total circles: " << circnt << endl;
-//   destroyWindow(filename); 
+   destroyWindow(filename); 
    outfile.close();
 }

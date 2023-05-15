@@ -1,0 +1,47 @@
+../data/Propofol.csv,../tests/hogsvmNoDisplayPropofol.csv,Propofol,226,96,238,30,590,88.2812,28.7425,70.1863,78.6441,78.2007
+../data/Propofol.csv,../tests/hogsvmNoDisplayPropofol.csv,Phenylephrine,0,1,589,0,590,nan,0.169492,0,99.8305,0
+../data/Propofol.csv,../tests/hogsvmNoDisplayPropofol.csv,All Video Meds (2),226,97,3187,30,3540,88.2812,2.95372,69.969,96.4124,78.0656
+../data/Rocuronium.csv,../tests/hogsvmNoDisplayRocuronium.csv,Rocuronium,269,97,208,6,580,97.8182,31.8033,73.4973,82.2414,83.9314
+../data/Rocuronium.csv,../tests/hogsvmNoDisplayRocuronium.csv,All Video Meds (1),269,97,3108,6,3480,97.8182,3.02652,73.4973,97.0402,83.9314
+../data/Phenylephrine.csv,../tests/hogsvmNoDisplayPhenylephrine.csv,Phenylephrine,219,83,230,53,585,80.5147,26.5176,72.5166,76.7521,76.3066
+../data/Phenylephrine.csv,../tests/hogsvmNoDisplayPhenylephrine.csv,All Video Meds (1),219,83,3155,53,3510,80.5147,2.56331,72.5166,96.1254,76.3066
+../data/Lidocaine.csv,../tests/hogsvmNoDisplayLidocaine.csv,Lidocaine,8,3,281,284,576,2.73973,1.05634,72.7273,50.1736,5.28053
+../data/Lidocaine.csv,../tests/hogsvmNoDisplayLidocaine.csv,All Video Meds (1),8,3,3161,284,3456,2.73973,0.0948167,72.7273,91.6956,5.28053
+../data/Dexamethasone.csv,../tests/hogsvmNoDisplayDexamethasone.csv,Phenylephrine,0,1,586,0,587,nan,0.170358,0,99.8296,0
+../data/Dexamethasone.csv,../tests/hogsvmNoDisplayDexamethasone.csv,Odanestron,0,178,409,0,587,nan,30.3237,0,69.6763,0
+../data/Dexamethasone.csv,../tests/hogsvmNoDisplayDexamethasone.csv,Dexamethasone,5,0,309,273,587,1.79856,0,100,53.4923,3.53357
+../data/Dexamethasone.csv,../tests/hogsvmNoDisplayDexamethasone.csv,All Video Meds (3),5,179,3065,273,3522,1.79856,5.51788,2.71739,87.1664,2.1645
+../data/Odanestron.csv,../tests/hogsvmNoDisplayOdanestron.csv,Odanestron,50,7,307,227,591,18.0505,2.2293,87.7193,60.4061,29.9401
+../data/Odanestron.csv,../tests/hogsvmNoDisplayOdanestron.csv,Dexamethasone,0,14,577,0,591,nan,2.36887,0,97.6311,0
+../data/Odanestron.csv,../tests/hogsvmNoDisplayOdanestron.csv,All Video Meds (2),50,21,3248,227,3546,18.0505,0.642398,70.4225,93.0062,28.7356
+../data/2_label.csv,../tests/hogsvmNoDisplay2_label.csv,Propofol,342,23,147,18,530,95,13.5294,93.6986,92.2642,94.3448
+../data/2_label.csv,../tests/hogsvmNoDisplay2_label.csv,Rocuronium,337,26,162,5,530,98.538,13.8298,92.8375,94.1509,95.6028
+../data/2_label.csv,../tests/hogsvmNoDisplay2_label.csv,All Video Meds (2),679,49,2429,23,3180,96.7236,1.9774,93.2692,97.7359,94.965
+../data/3_label.csv,../tests/hogsvmNoDisplay3_label.csv,Propofol,493,21,74,3,591,99.3952,22.1053,95.9144,95.9391,97.6238
+../data/3_label.csv,../tests/hogsvmNoDisplay3_label.csv,Rocuronium,413,24,144,10,591,97.6359,14.2857,94.508,94.247,96.0465
+../data/3_label.csv,../tests/hogsvmNoDisplay3_label.csv,Phenylephrine,332,23,203,33,591,90.9589,10.177,93.5211,90.5245,92.2222
+../data/3_label.csv,../tests/hogsvmNoDisplay3_label.csv,Lidocaine,0,1,590,0,591,nan,0.169205,0,99.8308,0
+../data/3_label.csv,../tests/hogsvmNoDisplay3_label.csv,All Video Meds (4),1238,69,2193,46,3546,96.4174,3.0504,94.7207,96.7569,95.5616
+../data/4_label.csv,../tests/hogsvmNoDisplay4_label.csv,Propofol,198,16,99,278,591,41.5966,13.913,92.5234,50.2538,57.3913
+../data/4_label.csv,../tests/hogsvmNoDisplay4_label.csv,Rocuronium,446,16,124,5,591,98.8914,11.4286,96.5368,96.4467,97.6999
+../data/4_label.csv,../tests/hogsvmNoDisplay4_label.csv,Phenylephrine,373,16,165,37,591,90.9756,8.83978,95.8869,91.0322,93.3667
+../data/4_label.csv,../tests/hogsvmNoDisplay4_label.csv,Lidocaine,289,11,220,71,591,80.2778,4.7619,96.3333,86.1252,87.5758
+../data/4_label.csv,../tests/hogsvmNoDisplay4_label.csv,All Video Meds (4),1306,59,1790,391,3546,76.9593,3.19091,95.6777,87.3096,85.3037
+../data/5_label.csv,../tests/hogsvmNoDisplay5_label.csv,Propofol,413,3,92,83,591,83.2661,3.15789,99.2788,85.4484,90.5702
+../data/5_label.csv,../tests/hogsvmNoDisplay5_label.csv,Rocuronium,432,12,143,4,591,99.0826,7.74194,97.2973,97.2927,98.1818
+../data/5_label.csv,../tests/hogsvmNoDisplay5_label.csv,Phenylephrine,369,29,181,12,591,96.8504,13.8095,92.7136,93.0626,94.7368
+../data/5_label.csv,../tests/hogsvmNoDisplay5_label.csv,Lidocaine,353,21,215,2,591,99.4366,8.8983,94.385,96.1083,96.845
+../data/5_label.csv,../tests/hogsvmNoDisplay5_label.csv,Odanestron,333,4,226,28,591,92.2438,1.73913,98.8131,94.5854,95.4155
+../data/5_label.csv,../tests/hogsvmNoDisplay5_label.csv,Dexamethasone,0,5,586,0,591,nan,0.846024,0,99.154,0
+../data/5_label.csv,../tests/hogsvmNoDisplay5_label.csv,All Video Meds (6),1900,74,1443,129,3546,93.6422,4.87805,96.2513,94.2752,94.9288
+../data/6_label.csv,../tests/hogsvmNoDisplay6_label.csv,Propofol,405,4,76,106,591,79.2564,5,99.022,81.3875,88.0435
+../data/6_label.csv,../tests/hogsvmNoDisplay6_label.csv,Rocuronium,404,23,101,63,591,86.5096,18.5484,94.6136,85.4484,90.3803
+../data/6_label.csv,../tests/hogsvmNoDisplay6_label.csv,Phenylephrine,311,4,168,108,591,74.2243,2.32558,98.7302,81.0491,84.7411
+../data/6_label.csv,../tests/hogsvmNoDisplay6_label.csv,Lidocaine,33,19,197,342,591,8.8,8.7963,63.4615,38.9171,15.4567
+../data/6_label.csv,../tests/hogsvmNoDisplay6_label.csv,Odanestron,330,6,220,35,591,90.411,2.65487,98.2143,93.0626,94.1512
+../data/6_label.csv,../tests/hogsvmNoDisplay6_label.csv,Dexamethasone,23,1,270,297,591,7.1875,0.369004,95.8333,49.577,13.3721
+../data/6_label.csv,../tests/hogsvmNoDisplay6_label.csv,All Video Meds (6),1506,57,1032,951,3546,61.2943,5.23416,96.3532,71.5736,74.9254
+../data/no_color.csv,../tests/hogsvmNoDisplayno_color.csv,Odanestron,239,78,98,176,591,57.5904,44.3182,75.3943,57.022,65.3005
+../data/no_color.csv,../tests/hogsvmNoDisplayno_color.csv,Dexamethasone,121,29,142,299,591,28.8095,16.9591,80.6667,44.5008,42.4561
+../data/no_color.csv,../tests/hogsvmNoDisplayno_color.csv,All Video Meds (2),360,107,2604,475,3546,43.1138,3.94688,77.0878,83.5871,55.2995
+../data/blank.csv,../tests/hogsvmNoDisplayblank.csv,All Video Meds (0),0,0,6,0,6,nan,0,nan,100,nan

@@ -1,0 +1,56 @@
+../data/Propofol.csv,../tests/linesNoDisplayPropofol.csv,Propofol,253,114,219,3,589,98.8281,34.2342,68.9373,80.1358,81.2199
+../data/Propofol.csv,../tests/linesNoDisplayPropofol.csv,Phenylephrine,0,14,575,0,589,nan,2.37691,0,97.6231,0
+../data/Propofol.csv,../tests/linesNoDisplayPropofol.csv,Odanestron,0,2,587,0,589,nan,0.339559,0,99.6604,0
+../data/Propofol.csv,../tests/linesNoDisplayPropofol.csv,All Video Meds (3),253,130,3148,3,3534,98.8281,3.96583,66.0574,96.2366,79.1862
+../data/Rocuronium.csv,../tests/linesNoDisplayRocuronium.csv,Rocuronium,278,82,223,8,591,97.2028,26.8852,77.2222,84.7716,86.0681
+../data/Rocuronium.csv,../tests/linesNoDisplayRocuronium.csv,Phenylephrine,0,4,587,0,591,nan,0.676819,0,99.3232,0
+../data/Rocuronium.csv,../tests/linesNoDisplayRocuronium.csv,Odanestron,0,1,590,0,591,nan,0.169205,0,99.8308,0
+../data/Rocuronium.csv,../tests/linesNoDisplayRocuronium.csv,All Video Meds (3),278,87,3173,8,3546,97.2028,2.66871,76.1644,97.3209,85.4071
+../data/Phenylephrine.csv,../tests/linesNoDisplayPhenylephrine.csv,Phenylephrine,236,62,251,29,578,89.0566,19.8083,79.1946,84.2561,83.8366
+../data/Phenylephrine.csv,../tests/linesNoDisplayPhenylephrine.csv,Lidocaine,0,1,577,0,578,nan,0.17301,0,99.827,0
+../data/Phenylephrine.csv,../tests/linesNoDisplayPhenylephrine.csv,Odanestron,0,2,576,0,578,nan,0.346021,0,99.654,0
+../data/Phenylephrine.csv,../tests/linesNoDisplayPhenylephrine.csv,All Video Meds (3),236,65,3138,29,3468,89.0566,2.02935,78.4053,97.2895,83.3922
+../data/Lidocaine.csv,../tests/linesNoDisplayLidocaine.csv,Phenylephrine,0,14,563,0,577,nan,2.42634,0,97.5737,0
+../data/Lidocaine.csv,../tests/linesNoDisplayLidocaine.csv,Lidocaine,138,38,247,154,577,47.2603,13.3333,78.4091,66.7244,58.9744
+../data/Lidocaine.csv,../tests/linesNoDisplayLidocaine.csv,All Video Meds (2),138,52,3118,154,3462,47.2603,1.64038,72.6316,94.0497,57.2614
+../data/Dexamethasone.csv,../tests/linesNoDisplayDexamethasone.csv,Phenylephrine,0,4,585,0,589,nan,0.679117,0,99.3209,0
+../data/Dexamethasone.csv,../tests/linesNoDisplayDexamethasone.csv,Lidocaine,0,3,586,0,589,nan,0.509338,0,99.4907,0
+../data/Dexamethasone.csv,../tests/linesNoDisplayDexamethasone.csv,Odanestron,0,287,302,0,589,nan,48.7267,0,51.2733,0
+../data/Dexamethasone.csv,../tests/linesNoDisplayDexamethasone.csv,Dexamethasone,10,0,311,268,589,3.59712,0,100,54.4991,6.94444
+../data/Dexamethasone.csv,../tests/linesNoDisplayDexamethasone.csv,All Video Meds (4),10,294,2962,268,3534,3.59712,9.02948,3.28947,84.0973,3.43643
+../data/Odanestron.csv,../tests/linesNoDisplayOdanestron.csv,Phenylephrine,0,13,578,0,591,nan,2.19966,0,97.8003,0
+../data/Odanestron.csv,../tests/linesNoDisplayOdanestron.csv,Lidocaine,0,2,589,0,591,nan,0.338409,0,99.6616,0
+../data/Odanestron.csv,../tests/linesNoDisplayOdanestron.csv,Odanestron,205,39,275,72,591,74.0072,12.4204,84.0164,81.2183,78.6948
+../data/Odanestron.csv,../tests/linesNoDisplayOdanestron.csv,Dexamethasone,0,68,523,0,591,nan,11.5059,0,88.4941,0
+../data/Odanestron.csv,../tests/linesNoDisplayOdanestron.csv,All Video Meds (4),205,122,3147,72,3546,74.0072,3.73203,62.6911,94.529,67.8808
+../data/2_label.csv,../tests/linesNoDisplay2_label.csv,Propofol,360,42,127,0,529,100,24.8521,89.5522,92.0605,94.4882
+../data/2_label.csv,../tests/linesNoDisplay2_label.csv,Rocuronium,340,24,163,2,529,99.4152,12.8342,93.4066,95.0851,96.3173
+../data/2_label.csv,../tests/linesNoDisplay2_label.csv,All Video Meds (2),700,66,2406,2,3174,99.7151,2.6699,91.3838,97.8576,95.3679
+../data/3_label.csv,../tests/linesNoDisplay3_label.csv,Propofol,486,26,69,10,591,97.9839,27.3684,94.9219,93.9086,96.4286
+../data/3_label.csv,../tests/linesNoDisplay3_label.csv,Rocuronium,401,25,143,22,591,94.7991,14.881,94.1315,92.0474,94.4641
+../data/3_label.csv,../tests/linesNoDisplay3_label.csv,Phenylephrine,333,16,210,32,591,91.2329,7.07965,95.4155,91.8782,93.2773
+../data/3_label.csv,../tests/linesNoDisplay3_label.csv,All Video Meds (3),1220,67,2195,64,3546,95.0156,2.96198,94.7941,96.3057,94.9047
+../data/4_label.csv,../tests/linesNoDisplay4_label.csv,Propofol,468,23,92,8,591,98.3193,20,95.3157,94.7547,96.7942
+../data/4_label.csv,../tests/linesNoDisplay4_label.csv,Rocuronium,448,28,112,3,591,99.3348,20,94.1176,94.7547,96.6559
+../data/4_label.csv,../tests/linesNoDisplay4_label.csv,Phenylephrine,408,27,154,2,591,99.5122,14.9171,93.7931,95.0931,96.568
+../data/4_label.csv,../tests/linesNoDisplay4_label.csv,Lidocaine,340,17,214,20,591,94.4444,7.35931,95.2381,93.7394,94.8396
+../data/4_label.csv,../tests/linesNoDisplay4_label.csv,All Video Meds (4),1664,95,1754,33,3546,98.0554,5.13791,94.5992,96.3903,96.2963
+../data/5_label.csv,../tests/linesNoDisplay5_label.csv,Propofol,485,16,79,10,590,97.9798,16.8421,96.8064,95.5932,97.3896
+../data/5_label.csv,../tests/linesNoDisplay5_label.csv,Rocuronium,418,28,127,17,590,96.092,18.0645,93.722,92.3729,94.8922
+../data/5_label.csv,../tests/linesNoDisplay5_label.csv,Phenylephrine,375,30,180,5,590,98.6842,14.2857,92.5926,94.0678,95.5414
+../data/5_label.csv,../tests/linesNoDisplay5_label.csv,Lidocaine,340,18,218,14,590,96.0452,7.62712,94.9721,94.5763,95.5056
+../data/5_label.csv,../tests/linesNoDisplay5_label.csv,Odanestron,353,6,224,7,590,98.0556,2.6087,98.3287,97.7966,98.1919
+../data/5_label.csv,../tests/linesNoDisplay5_label.csv,Dexamethasone,0,7,583,0,590,nan,1.18644,0,98.8136,0
+../data/5_label.csv,../tests/linesNoDisplay5_label.csv,All Video Meds (6),1971,105,1411,53,3540,97.3814,6.92612,94.9422,95.5367,96.1463
+../data/6_label.csv,../tests/linesNoDisplay6_label.csv,Propofol,502,13,67,9,591,98.2387,16.25,97.4757,96.2775,97.8558
+../data/6_label.csv,../tests/linesNoDisplay6_label.csv,Rocuronium,456,23,101,11,591,97.6445,18.5484,95.1983,94.247,96.4059
+../data/6_label.csv,../tests/linesNoDisplay6_label.csv,Phenylephrine,372,15,157,47,591,88.7828,8.72093,96.124,89.5093,92.3077
+../data/6_label.csv,../tests/linesNoDisplay6_label.csv,Lidocaine,351,22,194,24,591,93.6,10.1852,94.1019,92.2166,93.8503
+../data/6_label.csv,../tests/linesNoDisplay6_label.csv,Odanestron,343,11,215,22,591,93.9726,4.86726,96.8927,94.4162,95.4103
+../data/6_label.csv,../tests/linesNoDisplay6_label.csv,Dexamethasone,20,2,269,300,591,6.25,0.738007,90.9091,48.9002,11.6959
+../data/6_label.csv,../tests/linesNoDisplay6_label.csv,All Video Meds (6),2044,86,1003,413,3546,83.1909,7.89715,95.9624,85.9278,89.1214
+../data/no_color.csv,../tests/linesNoDisplayno_color.csv,Lidocaine,0,4,587,0,591,nan,0.676819,0,99.3232,0
+../data/no_color.csv,../tests/linesNoDisplayno_color.csv,Odanestron,364,136,40,51,591,87.7108,77.2727,72.8,68.3587,79.5628
+../data/no_color.csv,../tests/linesNoDisplayno_color.csv,Dexamethasone,145,55,116,275,591,34.5238,32.1637,72.5,44.1624,46.7742
+../data/no_color.csv,../tests/linesNoDisplayno_color.csv,All Video Meds (3),509,195,2516,326,3546,60.9581,7.19292,72.3011,85.3074,66.1469
+../data/blank.csv,../tests/linesNoDisplayblank.csv,All Video Meds (0),0,0,6,0,6,nan,0,nan,100,nan
