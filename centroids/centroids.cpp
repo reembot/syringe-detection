@@ -134,10 +134,8 @@ int main(int argc, char** argv) {
     //unordered_map<string,bounding_box*> label_boxes;
     unordered_map<string,bool> had_label;
     vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine", "Odanestron", "Lidocaine", "Dexamethasone"};
-    //vector<string> labels = {"Rocuronium", "Propofol", "Phenylephrine", "Odanestron", "Lidocaine"};
 
     for ( string label : labels ) {
-        //label_boxes.insert( pair<string,bounding_box*>(label, new bounding_box(src.rows, src.cols)) );
         had_label.insert( pair<string,bool>(label,false) );
     }
 
@@ -154,9 +152,6 @@ int main(int argc, char** argv) {
         absdiff(srcPrev, srcGray, srcDiff);
         // prep new "previous" frame with current one
         srcPrev = srcGray.clone();
-
-        // set bounding box size
-        //bounding_box bbox(src.rows, src.cols);
 
         // search entire frame for threshold met
         for ( int j= 0; j< src.rows; j++ ) {
@@ -248,8 +243,6 @@ int main(int argc, char** argv) {
                         color = Scalar(70,70,70);
 
                     putText(src, label, Point(30,position), FONT_HERSHEY_COMPLEX_SMALL, 0.8, color, 1, LINE_AA);
-                    //bounding_box* color_box = label_boxes[label];
-                    //rectangle( src, Point(color_box->x_min, color_box->y_min), Point(color_box->x_max, color_box->y_max), color, 5, 0 );
                     position += 50;
                 }
             }
@@ -262,9 +255,6 @@ int main(int argc, char** argv) {
         prev_bbox = bbox;
         bbox.clear();
     }
-
-    //for ( string label : labels )
-	//	delete label_boxes[label];
     cap.release();
     return 0;
 }
