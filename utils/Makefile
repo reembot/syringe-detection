@@ -6,16 +6,16 @@ CDEFS=
 CFLAGS= -O3 -g $(INCLUDE_DIRS) $(CDEFS)
 LIBS= -L/usr/lib -lopencv_core -lopencv_flann -lopencv_video -lrt
 
-HFILES=
-CFILES= createVideo.cpp vidstamp.cpp showstamp.cpp scorestamps.cpp colorhist.cpp
+HFILES= 
+CFILES= createVideo.cpp vidstamp.cpp showstamp.cpp scorestamps.cpp colorhist.cpp timedstamps.cpp
 
 SRCS= ${HFILES} ${CFILES}
 OBJS= ${CFILES:.cpp=.o}
 
-all:	createVideo vidstamp showstamp scorestamps colorhist
+all:	createVideo vidstamp showstamp scorestamps colorhist timedstamps
 clean:
 	-rm -f *.o *.d
-	-rm -f createVideo vidstamp showstamp scorestamps colorhist
+	-rm -f createVideo vidstamp showstamp scorestamps colorhist timedstamps
 
 createVideo: createVideo.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $@.o `pkg-config --libs opencv4` $(LIBS)
@@ -30,6 +30,9 @@ scorestamps: scorestamps.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $@.o `pkg-config --libs opencv4` $(LIBS)
 
 colorhist: colorhist.o
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $@.o `pkg-config --libs opencv4` $(LIBS)
+
+timedstamps: timedstamps.o
 	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $@.o `pkg-config --libs opencv4` $(LIBS)
 
 depend:

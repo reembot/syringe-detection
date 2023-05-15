@@ -19,6 +19,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+//standard main OpenCV capture and output file setup
     const char *default_file = "0";
     const char *filename = argc >= 2 ? argv[1] : default_file;
     const char* output_file = "vout.csv";
@@ -34,15 +35,23 @@ int main(int argc, char **argv)
     {
         cap.open(filename);
     }
-    bool canView = 0;
-//    namedWindow(filename);
+    namedWindow(filename);
+
     char winInput;
+    bool canView = 0;
     int waitval = 1;
     bool origView = 1, tview = 1;
+
+//setup mats for transformations
     int cnt=0;
     Mat gray, blurred, threshed, edges;
+//lines to be stored
     vector<Vec4i> top_lines, last_lines;
+//flags for detections
     bool hadPr=0,hadR=0,hadPh=0,hadL=0,hadO=0,hadD=0;
+
+
+    printf("Press space to pause/unpause, 's' to step frame by frame, 'c' to switch views or 'esc' to exit\n");
 
     while (true)
     {
@@ -162,43 +171,63 @@ int main(int argc, char **argv)
         hadR=hasR;
         outfile << "Rocuronium" << "," << msecs << endl;      
       }
-      else if(hasPr!=hadPr)
+      if(hasPr!=hadPr)
       {
         hadPr=hasPr;
         outfile << "Propofol" << "," << msecs << endl;      
       }
-      else if(hasPh!=hadPh)
+      if(hasPh!=hadPh)
       {
         hadPh=hasPh;
         outfile << "Phenylephrine" << "," << msecs << endl;      
       }
-      else if(hasL!=hadL)
+      if(hasL!=hadL)
       {
         hadL=hasL;
         outfile << "Lidocaine" << "," << msecs << endl;      
       }
-      else if(hasO!=hadO)
+      if(hasO!=hadO)
       {
         hadO=hasO;
         outfile << "Odanestron" << "," << msecs << endl;      
       }
-      else if(hasD!=hadD)
+      if(hasD!=hadD)
       {
         hadD=hasD;
         outfile << "Dexamethasone" << "," << msecs << endl;      
       }
+
+//put name of medications detected on frame
+      if(hasR) {
+        putText(frame, "Rocuronium", Point(30,100), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA);
+      }
+      if(hasPr) {
+        putText(frame, "Propofol", Point(30,50), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA);
+      }
+      if(hasPh) {
+        putText(frame, "Phenylephrine", Point(30,150), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA);
+      }
+
+      if(hasL) { 
+        putText(frame, "Lidocaine", Point(30,200), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA); 
+      }
+
+      if(hasO) { 
+        putText(frame, "Odanestron", Point(30,250), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA); 
+      }
+
+      if(hasD) { 
+        putText(frame, "Dexamethasone", Point(30,300), FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(0,0,255), 1, LINE_AA); 
+      }
       
       if(origView)
       {
-//        imshow(filename, frame);
+        imshow(filename, frame);
       } else {
-//        imshow(filename, edges);
+        imshow(filename, edges);
       }
 
-
-        // Wait for a key press and check if it's the ESC key
-
-/*
+       // Wait for a key press and check if it's the ESC key, s, space or c
       if ((winInput = waitKey(waitval)) == 27)
       {
           break;
@@ -213,14 +242,13 @@ int main(int argc, char **argv)
       }
       else if(winInput == 'c') 
       {
-          origView = origView ? 0 : 1; //flip flag to show original or difference
+          origView = origView ? 0 : 1; //flip flag to show original or canny view
       }
-*/
     }
 
     // Release the video capture device and destroy the window
     cap.release();
-//    destroyAllWindows();
-
+    destroyAllWindows();
+    outfile.close();
     return 0;
 }

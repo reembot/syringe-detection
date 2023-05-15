@@ -15,8 +15,7 @@ class SyringeDetector:
         if not self.isCalibrated:
             raise Exception("SyringeDetector is not calibrated")
         # Convert the image to grayscale
-        copy = self.image.copy()
-        self_gray = cv2.cvtColor(copy, cv2.COLOR_BGR2GRAY)
+        self_gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         
         # Apply a Gaussian blur to the image
@@ -34,18 +33,13 @@ class SyringeDetector:
         contours, hierarchy = cv2.findContours(threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         
         # Draw the contours on the original image
-        # cv2.drawContours(image, contours, -1, (0, 255, 0), 2)
+        cv2.drawContours(image, contours, -1, (0, 255, 0), 2)
         
         # Show the difference image
-        # cv2.imshow("Difference Image", diff)
+        cv2.imshow("Difference Image", diff)
         
         # Show the thresholded image
-        # cv2.imshow("Thresholded Image", threshold)
+        cv2.imshow("Thresholded Image", threshold)
         
         # Return the coordinates of the contours
         return contours
-    def getLargestContour(self, contours):
-        if len(contours) == 0:
-            return None
-        largestContour = max(contours, key=cv2.contourArea)
-        return largestContour

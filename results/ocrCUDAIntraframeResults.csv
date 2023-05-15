@@ -1,0 +1,65 @@
+../data/Propofol.csv,../tests/ocrCUDAIntraframePropofol.csv,Propofol,256,140,195,0,591,100,41.791,64.6465,76.3113,78.5276
+../data/Propofol.csv,../tests/ocrCUDAIntraframePropofol.csv,Phenylephrine,0,38,553,0,591,nan,6.42978,0,93.5702,0
+../data/Propofol.csv,../tests/ocrCUDAIntraframePropofol.csv,Lidocaine,0,6,585,0,591,nan,1.01523,0,98.9848,0
+../data/Propofol.csv,../tests/ocrCUDAIntraframePropofol.csv,Dexamethasone,0,1,590,0,591,nan,0.169205,0,99.8308,0
+../data/Propofol.csv,../tests/ocrCUDAIntraframePropofol.csv,All Video Meds (4),256,185,3105,0,3546,100,5.6231,58.0499,94.7829,73.4577
+../data/Rocuronium.csv,../tests/ocrCUDAIntraframeRocuronium.csv,Rocuronium,275,120,185,0,580,100,39.3443,69.6203,79.3103,82.0895
+../data/Rocuronium.csv,../tests/ocrCUDAIntraframeRocuronium.csv,Phenylephrine,0,18,562,0,580,nan,3.10345,0,96.8966,0
+../data/Rocuronium.csv,../tests/ocrCUDAIntraframeRocuronium.csv,Lidocaine,0,4,576,0,580,nan,0.689655,0,99.3103,0
+../data/Rocuronium.csv,../tests/ocrCUDAIntraframeRocuronium.csv,Dexamethasone,0,2,578,0,580,nan,0.344828,0,99.6552,0
+../data/Rocuronium.csv,../tests/ocrCUDAIntraframeRocuronium.csv,All Video Meds (4),275,144,3061,0,3480,100,4.49298,65.6325,95.8621,79.2507
+../data/Phenylephrine.csv,../tests/ocrCUDAIntraframePhenylephrine.csv,Phenylephrine,219,88,225,48,580,82.0225,28.115,71.3355,76.5517,76.3066
+../data/Phenylephrine.csv,../tests/ocrCUDAIntraframePhenylephrine.csv,Lidocaine,0,28,552,0,580,nan,4.82759,0,95.1724,0
+../data/Phenylephrine.csv,../tests/ocrCUDAIntraframePhenylephrine.csv,Odanestron,0,2,578,0,580,nan,0.344828,0,99.6552,0
+../data/Phenylephrine.csv,../tests/ocrCUDAIntraframePhenylephrine.csv,Dexamethasone,0,2,578,0,580,nan,0.344828,0,99.6552,0
+../data/Phenylephrine.csv,../tests/ocrCUDAIntraframePhenylephrine.csv,All Video Meds (4),219,120,3093,48,3480,82.0225,3.73483,64.6018,95.1724,72.2772
+../data/Lidocaine.csv,../tests/ocrCUDAIntraframeLidocaine.csv,Phenylephrine,0,9,571,0,580,nan,1.55172,0,98.4483,0
+../data/Lidocaine.csv,../tests/ocrCUDAIntraframeLidocaine.csv,Lidocaine,174,82,206,118,580,59.589,28.4722,67.9688,65.5172,63.5036
+../data/Lidocaine.csv,../tests/ocrCUDAIntraframeLidocaine.csv,All Video Meds (2),174,91,3097,118,3480,59.589,2.85445,65.6604,93.9943,62.4776
+../data/Dexamethasone.csv,../tests/ocrCUDAIntraframeDexamethasone.csv,Phenylephrine,0,21,569,0,590,nan,3.55932,0,96.4407,0
+../data/Dexamethasone.csv,../tests/ocrCUDAIntraframeDexamethasone.csv,Lidocaine,0,33,557,0,590,nan,5.59322,0,94.4068,0
+../data/Dexamethasone.csv,../tests/ocrCUDAIntraframeDexamethasone.csv,Odanestron,0,261,329,0,590,nan,44.2373,0,55.7627,0
+../data/Dexamethasone.csv,../tests/ocrCUDAIntraframeDexamethasone.csv,Dexamethasone,255,42,270,23,590,91.7266,13.4615,85.8586,88.9831,88.6956
+../data/Dexamethasone.csv,../tests/ocrCUDAIntraframeDexamethasone.csv,All Video Meds (4),255,357,2905,23,3540,91.7266,10.9442,41.6667,89.2655,57.3034
+../data/Odanestron.csv,../tests/ocrCUDAIntraframeOdanestron.csv,Phenylephrine,0,14,577,0,591,nan,2.36887,0,97.6311,0
+../data/Odanestron.csv,../tests/ocrCUDAIntraframeOdanestron.csv,Lidocaine,0,16,575,0,591,nan,2.70728,0,97.2927,0
+../data/Odanestron.csv,../tests/ocrCUDAIntraframeOdanestron.csv,Odanestron,254,33,281,23,591,91.6968,10.5096,88.5017,90.5245,90.0709
+../data/Odanestron.csv,../tests/ocrCUDAIntraframeOdanestron.csv,Dexamethasone,0,316,275,0,591,nan,53.4687,0,46.5313,0
+../data/Odanestron.csv,../tests/ocrCUDAIntraframeOdanestron.csv,All Video Meds (4),254,379,2890,23,3546,91.6968,11.5938,40.1264,88.6633,55.8242
+../data/2_label.csv,../tests/ocrCUDAIntraframe2_label.csv,Propofol,360,50,122,0,532,100,29.0698,87.8049,90.6015,93.5065
+../data/2_label.csv,../tests/ocrCUDAIntraframe2_label.csv,Rocuronium,342,34,156,0,532,100,17.8947,90.9574,93.609,95.2646
+../data/2_label.csv,../tests/ocrCUDAIntraframe2_label.csv,Lidocaine,0,5,527,0,532,nan,0.93985,0,99.0602,0
+../data/2_label.csv,../tests/ocrCUDAIntraframe2_label.csv,All Video Meds (3),702,89,2401,0,3192,100,3.5743,88.7484,97.2118,94.0388
+../data/3_label.csv,../tests/ocrCUDAIntraframe3_label.csv,Propofol,496,32,63,0,591,100,33.6842,93.9394,94.5854,96.875
+../data/3_label.csv,../tests/ocrCUDAIntraframe3_label.csv,Rocuronium,423,30,138,0,591,100,17.8571,93.3775,94.9239,96.5753
+../data/3_label.csv,../tests/ocrCUDAIntraframe3_label.csv,Phenylephrine,307,17,209,58,591,84.1096,7.52212,94.7531,87.3096,89.1147
+../data/3_label.csv,../tests/ocrCUDAIntraframe3_label.csv,Lidocaine,0,113,478,0,591,nan,19.1201,0,80.8799,0
+../data/3_label.csv,../tests/ocrCUDAIntraframe3_label.csv,Odanestron,0,1,590,0,591,nan,0.169205,0,99.8308,0
+../data/3_label.csv,../tests/ocrCUDAIntraframe3_label.csv,Dexamethasone,0,1,590,0,591,nan,0.169205,0,99.8308,0
+../data/3_label.csv,../tests/ocrCUDAIntraframe3_label.csv,All Video Meds (6),1226,194,2068,58,3546,95.4829,8.57648,86.338,92.8934,90.6805
+../data/4_label.csv,../tests/ocrCUDAIntraframe4_label.csv,Propofol,476,31,82,0,589,100,27.4336,93.8856,94.7368,96.8464
+../data/4_label.csv,../tests/ocrCUDAIntraframe4_label.csv,Rocuronium,449,29,111,0,589,100,20.7143,93.9331,95.0764,96.8716
+../data/4_label.csv,../tests/ocrCUDAIntraframe4_label.csv,Phenylephrine,408,25,156,0,589,100,13.8122,94.2263,95.7555,97.0274
+../data/4_label.csv,../tests/ocrCUDAIntraframe4_label.csv,Lidocaine,355,26,205,3,589,99.162,11.2554,93.1758,95.0764,96.0758
+../data/4_label.csv,../tests/ocrCUDAIntraframe4_label.csv,Odanestron,0,4,585,0,589,nan,0.679117,0,99.3209,0
+../data/4_label.csv,../tests/ocrCUDAIntraframe4_label.csv,Dexamethasone,0,4,585,0,589,nan,0.679117,0,99.3209,0
+../data/4_label.csv,../tests/ocrCUDAIntraframe4_label.csv,All Video Meds (6),1688,119,1724,3,3534,99.8226,6.45686,93.4145,96.5478,96.5123
+../data/5_label.csv,../tests/ocrCUDAIntraframe5_label.csv,Propofol,496,19,76,0,591,100,20,96.3107,96.7851,98.1207
+../data/5_label.csv,../tests/ocrCUDAIntraframe5_label.csv,Rocuronium,436,31,124,0,591,100,20,93.3619,94.7547,96.567
+../data/5_label.csv,../tests/ocrCUDAIntraframe5_label.csv,Phenylephrine,377,30,180,4,591,98.9501,14.2857,92.629,94.247,95.6853
+../data/5_label.csv,../tests/ocrCUDAIntraframe5_label.csv,Lidocaine,349,32,204,6,591,98.3099,13.5593,91.6011,93.5702,94.837
+../data/5_label.csv,../tests/ocrCUDAIntraframe5_label.csv,Odanestron,359,7,223,2,591,99.446,3.04348,98.0874,98.4772,98.762
+../data/5_label.csv,../tests/ocrCUDAIntraframe5_label.csv,Dexamethasone,0,369,222,0,591,nan,62.4366,0,37.5635,0
+../data/5_label.csv,../tests/ocrCUDAIntraframe5_label.csv,All Video Meds (6),2017,488,1029,12,3546,99.4086,32.1688,80.519,85.8996,88.9722
+../data/6_label.csv,../tests/ocrCUDAIntraframe6_label.csv,Propofol,511,16,64,0,591,100,20,96.964,97.2927,98.4586
+../data/6_label.csv,../tests/ocrCUDAIntraframe6_label.csv,Rocuronium,467,25,99,0,591,100,20.1613,94.9187,95.7699,97.3931
+../data/6_label.csv,../tests/ocrCUDAIntraframe6_label.csv,Phenylephrine,316,12,160,103,591,75.4177,6.97674,96.3415,80.5415,84.6051
+../data/6_label.csv,../tests/ocrCUDAIntraframe6_label.csv,Lidocaine,356,47,169,19,591,94.9333,21.7593,88.3375,88.8325,91.5167
+../data/6_label.csv,../tests/ocrCUDAIntraframe6_label.csv,Odanestron,354,11,215,11,591,96.9863,4.86726,96.9863,96.2775,96.9863
+../data/6_label.csv,../tests/ocrCUDAIntraframe6_label.csv,Dexamethasone,312,59,212,8,591,97.5,21.7712,84.097,88.6633,90.3039
+../data/6_label.csv,../tests/ocrCUDAIntraframe6_label.csv,All Video Meds (6),2316,170,919,141,3546,94.2613,15.6107,93.1617,91.2296,93.7083
+../data/no_color.csv,../tests/ocrCUDAIntraframeno_color.csv,Lidocaine,0,5,555,0,560,nan,0.892857,0,99.1071,0
+../data/no_color.csv,../tests/ocrCUDAIntraframeno_color.csv,Odanestron,376,131,45,8,560,97.9167,74.4318,74.1617,75.1786,84.3996
+../data/no_color.csv,../tests/ocrCUDAIntraframeno_color.csv,Dexamethasone,389,130,41,0,560,100,76.0234,74.9518,76.7857,85.6828
+../data/no_color.csv,../tests/ocrCUDAIntraframeno_color.csv,All Video Meds (3),765,266,2321,8,3360,98.9651,10.2822,74.1998,91.8452,84.8115
+../data/blank.csv,../tests/ocrCUDAIntraframeblank.csv,All Video Meds (0),0,0,6,0,6,nan,0,nan,100,nan

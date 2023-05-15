@@ -1,0 +1,55 @@
+../data/Propofol.csv,../tests/ocrOpenMPPropofol.csv,Propofol,256,99,235,0,590,100,29.6407,72.1127,83.2203,83.7971
+../data/Propofol.csv,../tests/ocrOpenMPPropofol.csv,Phenylephrine,0,124,466,0,590,nan,21.0169,0,78.983,0
+../data/Propofol.csv,../tests/ocrOpenMPPropofol.csv,Lidocaine,0,2,588,0,590,nan,0.338983,0,99.661,0
+../data/Propofol.csv,../tests/ocrOpenMPPropofol.csv,All Video Meds (3),256,225,3059,0,3540,100,6.8514,53.2225,93.6441,69.4708
+../data/Rocuronium.csv,../tests/ocrOpenMPRocuronium.csv,Rocuronium,275,94,211,0,580,100,30.8197,74.5257,83.7931,85.4037
+../data/Rocuronium.csv,../tests/ocrOpenMPRocuronium.csv,Phenylephrine,0,15,565,0,580,nan,2.58621,0,97.4138,0
+../data/Rocuronium.csv,../tests/ocrOpenMPRocuronium.csv,All Video Meds (2),275,109,3096,0,3480,100,3.40094,71.6146,96.8678,83.4598
+../data/Phenylephrine.csv,../tests/ocrOpenMPPhenylephrine.csv,Phenylephrine,226,63,250,39,578,85.283,20.1278,78.2007,82.3529,81.5884
+../data/Phenylephrine.csv,../tests/ocrOpenMPPhenylephrine.csv,Lidocaine,0,12,566,0,578,nan,2.07612,0,97.9239,0
+../data/Phenylephrine.csv,../tests/ocrOpenMPPhenylephrine.csv,All Video Meds (2),226,75,3128,39,3468,85.283,2.34155,75.0831,96.7128,79.8587
+../data/Lidocaine.csv,../tests/ocrOpenMPLidocaine.csv,Phenylephrine,0,16,563,0,579,nan,2.76339,0,97.2366,0
+../data/Lidocaine.csv,../tests/ocrOpenMPLidocaine.csv,Lidocaine,154,47,240,138,579,52.7397,16.3763,76.6169,68.0484,62.4746
+../data/Lidocaine.csv,../tests/ocrOpenMPLidocaine.csv,All Video Meds (2),154,63,3119,138,3474,52.7397,1.97989,70.9677,94.2142,60.5108
+../data/Dexamethasone.csv,../tests/ocrOpenMPDexamethasone.csv,Phenylephrine,0,17,571,0,588,nan,2.89116,0,97.1088,0
+../data/Dexamethasone.csv,../tests/ocrOpenMPDexamethasone.csv,Lidocaine,0,402,186,0,588,nan,68.3673,0,31.6327,0
+../data/Dexamethasone.csv,../tests/ocrOpenMPDexamethasone.csv,Odanestron,0,63,525,0,588,nan,10.7143,0,89.2857,0
+../data/Dexamethasone.csv,../tests/ocrOpenMPDexamethasone.csv,Dexamethasone,183,15,295,95,588,65.8273,4.83871,92.4242,81.2925,76.8908
+../data/Dexamethasone.csv,../tests/ocrOpenMPDexamethasone.csv,All Video Meds (4),183,497,2753,95,3528,65.8273,15.2923,26.9118,83.22,38.2046
+../data/Odanestron.csv,../tests/ocrOpenMPOdanestron.csv,Phenylephrine,0,10,547,0,557,nan,1.79533,0,98.2047,0
+../data/Odanestron.csv,../tests/ocrOpenMPOdanestron.csv,Lidocaine,0,18,539,0,557,nan,3.2316,0,96.7684,0
+../data/Odanestron.csv,../tests/ocrOpenMPOdanestron.csv,Odanestron,188,7,273,89,557,67.87,2.5,96.4103,82.7648,79.661
+../data/Odanestron.csv,../tests/ocrOpenMPOdanestron.csv,Dexamethasone,0,76,481,0,557,nan,13.6445,0,86.3555,0
+../data/Odanestron.csv,../tests/ocrOpenMPOdanestron.csv,All Video Meds (4),188,111,2954,89,3342,67.87,3.62153,62.8763,94.0156,65.2778
+../data/2_label.csv,../tests/ocrOpenMP2_label.csv,Propofol,360,38,132,0,530,100,22.3529,90.4523,92.8302,94.9868
+../data/2_label.csv,../tests/ocrOpenMP2_label.csv,Rocuronium,342,29,159,0,530,100,15.4255,92.1833,94.5283,95.9327
+../data/2_label.csv,../tests/ocrOpenMP2_label.csv,All Video Meds (2),702,67,2411,0,3180,100,2.70379,91.2874,97.8931,95.4453
+../data/3_label.csv,../tests/ocrOpenMP3_label.csv,Propofol,496,26,69,0,591,100,27.3684,95.0192,95.6007,97.446
+../data/3_label.csv,../tests/ocrOpenMP3_label.csv,Rocuronium,423,22,146,0,591,100,13.0952,95.0562,96.2775,97.4654
+../data/3_label.csv,../tests/ocrOpenMP3_label.csv,Phenylephrine,29,83,143,336,591,7.94521,36.7257,25.8929,29.1032,12.1593
+../data/3_label.csv,../tests/ocrOpenMP3_label.csv,Lidocaine,0,60,531,0,591,nan,10.1523,0,89.8477,0
+../data/3_label.csv,../tests/ocrOpenMP3_label.csv,All Video Meds (4),948,191,2071,336,3546,73.8318,8.44385,83.2309,85.1382,78.2501
+../data/4_label.csv,../tests/ocrOpenMP4_label.csv,Propofol,472,89,26,4,591,99.1597,77.3913,84.1355,84.264,91.0318
+../data/4_label.csv,../tests/ocrOpenMP4_label.csv,Rocuronium,451,62,78,0,591,100,44.2857,87.9142,89.5093,93.5685
+../data/4_label.csv,../tests/ocrOpenMP4_label.csv,Phenylephrine,410,53,128,0,591,100,29.2818,88.5529,91.0322,93.929
+../data/4_label.csv,../tests/ocrOpenMP4_label.csv,Lidocaine,0,3,228,360,591,0,1.2987,0,38.5787,0
+../data/4_label.csv,../tests/ocrOpenMP4_label.csv,All Video Meds (4),1333,207,1642,364,3546,78.5504,11.1952,86.5584,83.8973,82.3602
+../data/5_label.csv,../tests/ocrOpenMP5_label.csv,Propofol,492,16,79,0,587,100,16.8421,96.8504,97.2743,98.4
+../data/5_label.csv,../tests/ocrOpenMP5_label.csv,Rocuronium,432,26,129,0,587,100,16.7742,94.3231,95.5707,97.0787
+../data/5_label.csv,../tests/ocrOpenMP5_label.csv,Phenylephrine,371,27,183,6,587,98.4085,12.8571,93.2161,94.3782,95.7419
+../data/5_label.csv,../tests/ocrOpenMP5_label.csv,Lidocaine,351,27,209,0,587,100,11.4407,92.8571,95.4003,96.2963
+../data/5_label.csv,../tests/ocrOpenMP5_label.csv,Odanestron,52,0,230,305,587,14.5658,0,100,48.0409,25.4279
+../data/5_label.csv,../tests/ocrOpenMP5_label.csv,Dexamethasone,0,313,274,0,587,nan,53.322,0,46.678,0
+../data/5_label.csv,../tests/ocrOpenMP5_label.csv,All Video Meds (6),1698,409,1104,311,3522,84.5197,27.0324,80.5885,79.5571,82.5073
+../data/6_label.csv,../tests/ocrOpenMP6_label.csv,Propofol,511,12,68,0,591,100,15,97.7055,97.9695,98.8395
+../data/6_label.csv,../tests/ocrOpenMP6_label.csv,Rocuronium,467,22,102,0,591,100,17.7419,95.501,96.2775,97.6987
+../data/6_label.csv,../tests/ocrOpenMP6_label.csv,Phenylephrine,412,41,131,7,591,98.3294,23.8372,90.9492,91.8782,94.4954
+../data/6_label.csv,../tests/ocrOpenMP6_label.csv,Lidocaine,371,64,152,4,591,98.9333,29.6296,85.2874,88.4941,91.6049
+../data/6_label.csv,../tests/ocrOpenMP6_label.csv,Odanestron,343,2,224,22,591,93.9726,0.884956,99.4203,95.9391,96.6197
+../data/6_label.csv,../tests/ocrOpenMP6_label.csv,Dexamethasone,148,21,250,172,591,46.25,7.74908,87.574,67.3435,60.5317
+../data/6_label.csv,../tests/ocrOpenMP6_label.csv,All Video Meds (6),2252,162,927,205,3546,91.6565,14.876,93.2891,89.6503,92.4656
+../data/no_color.csv,../tests/ocrOpenMPno_color.csv,Lidocaine,0,9,551,0,560,nan,1.60714,0,98.3929,0
+../data/no_color.csv,../tests/ocrOpenMPno_color.csv,Odanestron,356,34,142,28,560,92.7083,19.3182,91.2821,88.9286,91.9897
+../data/no_color.csv,../tests/ocrOpenMPno_color.csv,Dexamethasone,363,28,143,26,560,93.3162,16.3743,92.8389,90.3571,93.0769
+../data/no_color.csv,../tests/ocrOpenMPno_color.csv,All Video Meds (3),719,71,2516,54,3360,93.0142,2.74449,91.0127,96.2798,92.0026
+../data/blank.csv,../tests/ocrOpenMPblank.csv,All Video Meds (0),0,0,6,0,6,nan,0,nan,100,nan
